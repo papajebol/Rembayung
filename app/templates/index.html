@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Watermark Remover</title>
+    <style>
+      body { font-family: Arial, sans-serif; max-width: 760px; margin: 48px auto; padding: 0 16px; }
+      .card { border: 1px solid #ddd; border-radius: 8px; padding: 20px; }
+      button { padding: 10px 16px; cursor: pointer; }
+      .hint { color: #555; font-size: 14px; }
+      #status { margin-top: 10px; }
+    </style>
+  </head>
+  <body>
+    <h1>Photo / Video Watermark Remover</h1>
+    <p class="hint">Mendukung watermark statis serta watermark teks bergerak yang blink/animasi (best effort).</p>
+    <div class="card">
+      <form id="uploadForm">
+        <input type="file" id="fileInput" name="file" required />
+        <button type="submit">Remove Watermark</button>
+      </form>
+      <div id="status"></div>
+    </div>
+
+    <script>
+      const form = document.getElementById('uploadForm');
+      const statusDiv = document.getElementById('status');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const fileInput = document.getElementById('fileInput');
+        if (!fileInput.files.length) {
+          statusDiv.textContent = 'Pilih file dulu.';
+          return;
+        }
+
+        const data = new FormData();
+        data.append('file', fileInput.files[0]);
+        statusDiv.textContent = 'Processing...';
+
+        try {
+          const res = await fetch('/remove', { method: 'POST', body: data });
+          if (!res.ok) {
+            const err = await res.json();
+            throw new Error(err.detail || 'Unknown error');
+          }
+
+          const blob = await res.blob();
+          const cd = res.headers.get('Content-Disposition') || '';
+          const matched = cd.match(/filename="?([^";]+)"?/);
+          const filename = matched ? matched[1] : 'cleaned-output';
+
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = filename;
+          a.click();
+          URL.revokeObjectURL(url);
+
+          statusDiv.textContent = 'Selesai. File sudah di-download.';
+        } catch (err) {
+          statusDiv.textContent = `Error: ${err.message}`;
+        }
+      });
+    </script>
+  </body>
+</html>
