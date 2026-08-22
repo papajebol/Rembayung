@@ -1,312 +1,762 @@
 //@version=6
-indicator("FCPO 25 Core Chart Pattern Detector V1", overlay=true, max_bars_back=1000, max_labels_count=300, max_lines_count=300)
+indicator("FCPO 25 Core Chart Pattern Detector V1", overlay = true, max_bars_back = 1000, max_labels_count = 300, max_lines_count = 300)
+
+// Constants -------------------------------------------------------------------
+int PIVOT_HIGH = 1
+int PIVOT_LOW = -1
+int TREND_UP = 1
+int TREND_DOWN = -1
+int TREND_ANY = 0
+int BREAK_UP = 1
+int BREAK_DOWN = -1
+int BREAK_BILATERAL = 0
+int STATUS_FORMING = 0
+int STATUS_CONFIRMED = 1
+int STATUS_FAILED = 2
+int MODE_REVERSAL = 1
+int MODE_CONTINUATION = 2
+int MODE_CONTEXTUAL = 3
+int MODE_BILATERAL = 4
+int INVALID_NONE = 0
+int INVALID_STATIC = 1
+int INVALID_OPPOSITE_BOUNDARY = 2
 
 // Inputs ----------------------------------------------------------------------
-string G_PIV="Structure", G_ATR="ATR normalization", G_TR="Prior trend", G_BR="Breakout / quality", G_OUT="Output", G_F="Families"
-int left=input.int(3,"Pivot left bars",1,20,group=G_PIV), right=input.int(3,"Pivot right bars",1,20,group=G_PIV)
-int maxP=input.int(40,"Maximum stored pivots",12,100,group=G_PIV), maxAge=input.int(180,"Candidate maximum age",20,600,group=G_PIV), maxActive=input.int(30,"Maximum active candidates",5,80,group=G_PIV)
-int atrLen=input.int(14,"ATR length",2,100,group=G_ATR), minTicks=input.int(2,"Minimum tolerance ticks",1,20,group=G_ATR)
-float atrMult=input.float(.20,"ATR tolerance multiplier",.01,2,step=.01,group=G_ATR), maxTolATR=input.float(.40,"Maximum tolerance ATR",.05,3,step=.05,group=G_ATR)
-int fastLen=input.int(20,"Fast EMA",2,200,group=G_TR), slowLen=input.int(50,"Slow EMA",3,400,group=G_TR), trendWin=input.int(30,"Pre-pattern slope window",10,200,group=G_TR)
-float slopeThr=input.float(.035,"Normalized slope threshold",.001,.5,step=.001,group=G_TR)
-int upScore=input.int(3,"Uptrend score threshold",1,4,group=G_TR), downScore=input.int(-3,"Downtrend score threshold",-4,-1,group=G_TR), minTrend=input.int(55,"Minimum trend strength",0,100,group=G_TR)
-float breakoutMult=input.float(.05,"Breakout ATR multiplier",0,1,step=.01,group=G_BR), minPoleATR=input.float(2,"Minimum pole ATR",.5,10,step=.25,group=G_BR)
-float minR2=input.float(.60,"Minimum curve R²",0,1,step=.05,group=G_BR), minQuality=input.int(60,"Minimum pattern quality",0,100,group=G_BR), maxFlagRatio=input.float(.55,"Maximum flag/pole ratio",.1,1,step=.05,group=G_BR)
-bool requireClose=input.bool(true,"Require breakout close",group=G_BR), useBreakStrength=input.bool(false,"Filter weak breakouts",group=G_BR), minBreakATR=input.float(.10,"Minimum breakout strength ATR",0,2,step=.05,group=G_BR), allowVCup=input.bool(false,"Allow V-like cups",group=G_BR)
-bool showForming=input.bool(false,"Show forming patterns",group=G_OUT), showConfirmed=input.bool(true,"Show confirmed patterns",group=G_OUT), showLow=input.bool(false,"Show low-quality patterns",group=G_OUT)
-bool showLines=input.bool(true,"Show pattern lines",group=G_OUT), showNeck=input.bool(true,"Show neckline",group=G_OUT), showBreak=input.bool(true,"Show breakout level",group=G_OUT), showLabels=input.bool(true,"Show labels",group=G_OUT), showDash=input.bool(true,"Show dashboard",group=G_OUT), debugMode=input.bool(false,"Debug mode",group=G_OUT)
-bool fDouble=input.bool(true,"Detect Double Patterns",group=G_F), fTriple=input.bool(true,"Detect Triple Patterns",group=G_F), fHns=input.bool(true,"Detect H&S",group=G_F), fRound=input.bool(true,"Detect Rounding Patterns",group=G_F), fDiamond=input.bool(true,"Detect Diamonds",group=G_F), fV=input.bool(true,"Detect V Patterns",group=G_F), fMega=input.bool(true,"Detect Megaphones",group=G_F), fBump=input.bool(true,"Detect Bump and Run",group=G_F), fWedge=input.bool(true,"Detect Wedges",group=G_F), fTri=input.bool(true,"Detect Triangles",group=G_F), fFlag=input.bool(true,"Detect Flags",group=G_F), fPennant=input.bool(true,"Detect Pennants",group=G_F), fRect=input.bool(true,"Detect Rectangles",group=G_F), fCup=input.bool(true,"Detect Cup and Handle",group=G_F)
+string G_PIV = "Structure"
+string G_ATR = "ATR normalization"
+string G_TR = "Prior trend"
+string G_BR = "Breakout / quality"
+string G_OUT = "Output"
+string G_F = "Families"
+int left = input.int(3, "Pivot left bars", 1, 20, group = G_PIV)
+int right = input.int(3, "Pivot right bars", 1, 20, group = G_PIV)
+int maxP = input.int(40, "Maximum stored pivots", 12, 100, group = G_PIV)
+int maxAge = input.int(180, "Candidate maximum age", 20, 600, group = G_PIV)
+int maxActive = input.int(30, "Maximum active candidates", 5, 80, group = G_PIV)
+int atrLen = input.int(14, "ATR length", 2, 100, group = G_ATR)
+int minTicks = input.int(2, "Minimum tolerance ticks", 1, 20, group = G_ATR)
+float atrMult = input.float(0.20, "ATR tolerance multiplier", 0.01, 2.0, step = 0.01, group = G_ATR)
+float maxTolATR = input.float(0.40, "Maximum tolerance ATR", 0.05, 3.0, step = 0.05, group = G_ATR)
+int fastLen = input.int(20, "Fast EMA", 2, 200, group = G_TR)
+int slowLen = input.int(50, "Slow EMA", 3, 400, group = G_TR)
+int trendWin = input.int(30, "Pre-pattern slope window", 10, 200, group = G_TR)
+float slopeThr = input.float(0.035, "Normalized slope threshold", 0.001, 0.5, step = 0.001, group = G_TR)
+int upScore = input.int(3, "Uptrend score threshold", 1, 4, group = G_TR)
+int downScore = input.int(-3, "Downtrend score threshold", -4, -1, group = G_TR)
+int minTrend = input.int(55, "Minimum trend strength", 0, 100, group = G_TR)
+float breakoutMult = input.float(0.05, "Breakout ATR multiplier", 0.0, 1.0, step = 0.01, group = G_BR)
+float minPoleATR = input.float(2.0, "Minimum pole ATR", 0.5, 10.0, step = 0.25, group = G_BR)
+float accelerationMultiplier = input.float(1.8, "Bump acceleration multiplier", 1.1, 5.0, step = 0.1, group = G_BR)
+float minR2 = input.float(0.60, "Minimum curve R²", 0.0, 1.0, step = 0.05, group = G_BR)
+float vSymmetryMin = input.float(0.55, "Minimum V temporal symmetry", 0.1, 1.0, step = 0.05, group = G_BR)
+int minQuality = input.int(60, "Minimum pattern quality", 0, 100, group = G_BR)
+float maxFlagRatio = input.float(0.55, "Maximum flag/pole ratio", 0.1, 1.0, step = 0.05, group = G_BR)
+bool requireClose = input.bool(true, "Require breakout close", group = G_BR)
+bool useBreakStrength = input.bool(false, "Filter weak breakouts", group = G_BR)
+float minBreakATR = input.float(0.10, "Minimum breakout strength ATR", 0.0, 2.0, step = 0.05, group = G_BR)
+bool allowVCup = input.bool(false, "Allow V-like cups", group = G_BR)
+bool showForming = input.bool(false, "Show forming patterns", group = G_OUT)
+bool showConfirmed = input.bool(true, "Show confirmed patterns", group = G_OUT)
+bool showLow = input.bool(false, "Show low-quality patterns", group = G_OUT)
+bool showLines = input.bool(true, "Show pattern lines", group = G_OUT)
+bool showNeck = input.bool(true, "Show neckline", group = G_OUT)
+bool showBreak = input.bool(true, "Show breakout level", group = G_OUT)
+bool showLabels = input.bool(true, "Show labels", group = G_OUT)
+bool showDash = input.bool(true, "Show dashboard", group = G_OUT)
+bool debugMode = input.bool(false, "Debug mode", group = G_OUT)
+bool fDouble = input.bool(true, "Detect Double Patterns", group = G_F)
+bool fTriple = input.bool(true, "Detect Triple Patterns", group = G_F)
+bool fHns = input.bool(true, "Detect H&S", group = G_F)
+bool fRound = input.bool(true, "Detect Rounding Patterns", group = G_F)
+bool fDiamond = input.bool(true, "Detect Diamonds", group = G_F)
+bool fV = input.bool(true, "Detect V Patterns", group = G_F)
+bool fMega = input.bool(true, "Detect Megaphones", group = G_F)
+bool fBump = input.bool(true, "Detect Bump and Run", group = G_F)
+bool fWedge = input.bool(true, "Detect Wedges", group = G_F)
+bool fTri = input.bool(true, "Detect Triangles", group = G_F)
+bool fFlag = input.bool(true, "Detect Flags", group = G_F)
+bool fPennant = input.bool(true, "Detect Pennants", group = G_F)
+bool fRect = input.bool(true, "Detect Rectangles", group = G_F)
+bool fCup = input.bool(true, "Detect Cup and Handle", group = G_F)
 
-// Normalized series and historical trend state --------------------------------
-float atr=ta.atr(atrLen), tol=math.max(syminfo.mintick*minTicks,math.min(atr*atrMult,atr*maxTolATR)), buffer=atr*breakoutMult
-float fast=ta.ema(close,fastLen), slow=ta.ema(close,slowLen)
-float reg=ta.linreg(close,trendWin,0), regPrev=ta.linreg(close,trendWin,1), nSlope=(reg-regPrev)/math.max(atr,syminfo.mintick)
-var array<int> pType=array.new_int()
-var array<float> pPrice=array.new_float()
-var array<int> pBar=array.new_int()
-var array<float> pAtr=array.new_float()
+// Shared normalized primitives ------------------------------------------------
+float atr = ta.atr(atrLen)
+float levelTolerance = math.max(syminfo.mintick * minTicks, math.min(atr * atrMult, atr * maxTolATR))
+float breakoutBuffer = atr * breakoutMult
+float fast = ta.ema(close, fastLen)
+float slow = ta.ema(close, slowLen)
+float regression = ta.linreg(close, trendWin, 0)
+float regressionPrevious = ta.linreg(close, trendWin, 1)
+float normalizedTrendSlope = (regression - regressionPrevious) / math.max(atr, syminfo.mintick)
 
-f_p(int back)=>array.get(pPrice,array.size(pPrice)-1-back)
-f_b(int back)=>array.get(pBar,array.size(pBar)-1-back)
-f_t(int back)=>array.get(pType,array.size(pType)-1-back)
-f_eq(float a,float b,float at)=>math.abs(a-b)<=math.max(syminfo.mintick*minTicks,math.min(at*atrMult,at*maxTolATR))
-f_ns(float a,float b,int ba,int bb,float at)=>(b-a)/math.max(at,syminfo.mintick)/math.max(bb-ba,1)
-f_clamp(float x)=>math.max(0,math.min(100,x))
+f_clamp(float value) =>
+    math.max(0.0, math.min(100.0, value))
 
-// Structure evidence only uses pivots already confirmed at this bar. Historical
-// arrays below freeze the combined state, allowing retrieval before startBar.
-float sh1=na, sh2=na, sl1=na, sl2=na
-int hc=0, lc=0
-if array.size(pType)>0
-    for z=0 to math.min(array.size(pType)-1,11)
-        if f_t(z)==1 and hc<2
-            if hc==0
-                sh1:=f_p(z)
+f_tolerance(float atrValue) =>
+    math.max(syminfo.mintick * minTicks, math.min(atrValue * atrMult, atrValue * maxTolATR))
+
+f_equalLevel(float first, float second, float atrValue) =>
+    not na(first) and not na(second) and math.abs(first - second) <= f_tolerance(atrValue)
+
+f_normalizedSlope(float firstPrice, float secondPrice, int firstBar, int secondBar, float atrValue) =>
+    float result = na
+    if not na(firstPrice) and not na(secondPrice) and secondBar != firstBar and not na(atrValue)
+        result := (secondPrice - firstPrice) / math.max(atrValue, syminfo.mintick) / (secondBar - firstBar)
+    result
+
+// A single boundary projection primitive is used by every static and sloping
+// breakout. Equal-bar anchors safely reduce to the second anchor price.
+f_lineValueAt(int firstBar, float firstPrice, int secondBar, float secondPrice, int targetBar) =>
+    float result = na
+    if not na(firstPrice) and not na(secondPrice)
+        result := secondBar == firstBar ? secondPrice : firstPrice + (secondPrice - firstPrice) / (secondBar - firstBar) * (targetBar - firstBar)
+    result
+
+f_overlapRatio(int firstStart, int firstEnd, int secondStart, int secondEnd) =>
+    int overlap = math.max(0, math.min(firstEnd, secondEnd) - math.max(firstStart, secondStart))
+    int shortest = math.max(1, math.min(firstEnd - firstStart, secondEnd - secondStart))
+    overlap * 1.0 / shortest
+
+f_windowRange(int startBar, int endBar) =>
+    float windowHigh = na
+    float windowLow = na
+    bool valid = startBar >= 0 and endBar >= startBar and endBar - startBar + 1 <= 200 and bar_index - startBar <= 999 and bar_index - endBar >= 0
+    if valid
+        int sampleCount = endBar - startBar + 1
+        int endOffset = bar_index - endBar
+        for sample = 0 to sampleCount - 1
+            float valueHigh = high[endOffset + sample]
+            float valueLow = low[endOffset + sample]
+            windowHigh := na(windowHigh) ? valueHigh : math.max(windowHigh, valueHigh)
+            windowLow := na(windowLow) ? valueLow : math.min(windowLow, valueLow)
+    [windowHigh, windowLow, valid]
+
+f_closeAt(int sourceBar) =>
+    float result = na
+    int offset = bar_index - sourceBar
+    if offset >= 0 and offset <= 999
+        result := close[offset]
+    result
+
+// Chronological least-squares slope for bounded bump-and-run segments.
+f_segmentSlope(int startBar, int endBar, float atrValue) =>
+    float result = na
+    bool valid = startBar >= 0 and endBar > startBar and bar_index - startBar <= 999 and endBar - startBar + 1 <= 200
+    if valid
+        int count = endBar - startBar + 1
+        float sumX = 0.0
+        float sumY = 0.0
+        float sumXX = 0.0
+        float sumXY = 0.0
+        int endOffset = bar_index - endBar
+        for sample = 0 to count - 1
+            float x = sample
+            float y = close[endOffset + count - 1 - sample]
+            sumX += x
+            sumY += y
+            sumXX += x * x
+            sumXY += x * y
+        float denominator = count * sumXX - sumX * sumX
+        if denominator != 0.0 and not na(atrValue)
+            result := ((count * sumXY - sumX * sumY) / denominator) / math.max(atrValue, syminfo.mintick)
+    result
+
+// Chronological quadratic fit. A positive coefficient is a rounded bottom and
+// a negative coefficient is a rounded top. Invalid windows return explicit na.
+f_curve(int startBar, int endBar) =>
+    float curve = na
+    float fitR2 = na
+    int count = endBar - startBar + 1
+    int endOffset = bar_index - endBar
+    bool valid = count >= 9 and count <= 80 and startBar >= 0 and endOffset >= 0 and bar_index - startBar <= 999
+    if valid
+        float sx = 0.0
+        float sx2 = 0.0
+        float sx3 = 0.0
+        float sx4 = 0.0
+        float sy = 0.0
+        float sxy = 0.0
+        float sx2y = 0.0
+        for sample = 0 to count - 1
+            float x = sample
+            float y = close[endOffset + count - 1 - sample]
+            sx += x
+            sx2 += x * x
+            sx3 += x * x * x
+            sx4 += x * x * x * x
+            sy += y
+            sxy += x * y
+            sx2y += x * x * y
+        float determinant = count * (sx2 * sx4 - sx3 * sx3) - sx * (sx * sx4 - sx2 * sx3) + sx2 * (sx * sx3 - sx2 * sx2)
+        if math.abs(determinant) > 0.0000000001
+            float coefficientA = (count * (sx2 * sx2y - sx3 * sxy) - sx * (sx * sx2y - sx2 * sxy) + sy * (sx * sx3 - sx2 * sx2)) / determinant
+            float coefficientB = (count * (sxy * sx4 - sx2y * sx3) - sy * (sx * sx4 - sx2 * sx3) + sx2 * (sx * sx2y - sxy * sx2)) / determinant
+            float coefficientC = (sy * (sx2 * sx4 - sx3 * sx3) - sx * (sxy * sx4 - sx2y * sx3) + sx2 * (sxy * sx3 - sx2y * sx2)) / determinant
+            float mean = sy / count
+            float total = 0.0
+            float error = 0.0
+            for sample = 0 to count - 1
+                float y = close[endOffset + count - 1 - sample]
+                float fitted = coefficientA * sample * sample + coefficientB * sample + coefficientC
+                total += math.pow(y - mean, 2)
+                error += math.pow(y - fitted, 2)
+            curve := coefficientA
+            fitR2 := total > 0.0 ? 1.0 - error / total : na
+    [curve, fitR2]
+
+// Confirmed alternating swing engine ------------------------------------------
+var array<int> pivotTypes = array.new_int()
+var array<float> pivotPrices = array.new_float()
+var array<int> pivotBars = array.new_int()
+var array<float> pivotATRs = array.new_float()
+
+f_pivotType(int back) =>
+    array.get(pivotTypes, array.size(pivotTypes) - 1 - back)
+
+f_pivotPrice(int back) =>
+    array.get(pivotPrices, array.size(pivotPrices) - 1 - back)
+
+f_pivotBar(int back) =>
+    array.get(pivotBars, array.size(pivotBars) - 1 - back)
+
+f_pivotATR(int back) =>
+    array.get(pivotATRs, array.size(pivotATRs) - 1 - back)
+
+f_shiftPivot() =>
+    array.shift(pivotTypes)
+    array.shift(pivotPrices)
+    array.shift(pivotBars)
+    array.shift(pivotATRs)
+
+f_acceptPivot(int pivotType, float pivotPrice, int pivotBar, float pivotATR) =>
+    bool changed = false
+    int size = array.size(pivotTypes)
+    if size == 0
+        array.push(pivotTypes, pivotType)
+        array.push(pivotPrices, pivotPrice)
+        array.push(pivotBars, pivotBar)
+        array.push(pivotATRs, pivotATR)
+        changed := true
+    else
+        int lastIndex = size - 1
+        int lastType = array.get(pivotTypes, lastIndex)
+        if lastType != pivotType
+            array.push(pivotTypes, pivotType)
+            array.push(pivotPrices, pivotPrice)
+            array.push(pivotBars, pivotBar)
+            array.push(pivotATRs, pivotATR)
+            changed := true
+        else
+            float oldPrice = array.get(pivotPrices, lastIndex)
+            bool moreExtreme = pivotType == PIVOT_HIGH ? pivotPrice > oldPrice : pivotPrice < oldPrice
+            if moreExtreme
+                array.set(pivotPrices, lastIndex, pivotPrice)
+                array.set(pivotBars, lastIndex, pivotBar)
+                array.set(pivotATRs, lastIndex, pivotATR)
+                changed := true
+    while array.size(pivotTypes) > maxP
+        f_shiftPivot()
+    changed
+
+float confirmedHigh = ta.pivothigh(high, left, right)
+float confirmedLow = ta.pivotlow(low, left, right)
+bool hasHigh = not na(confirmedHigh)
+bool hasLow = not na(confirmedLow)
+int confirmedBar = bar_index - right
+float confirmedATR = atr[right]
+bool structuralPivotChanged = false
+
+if hasHigh and hasLow
+    // Simultaneous PH/PL rule: retain the candidate with the larger ATR-normalized
+    // excursion from the last structural pivot. Exact ties prefer the type that
+    // alternates from the last pivot; a final tie deterministically prefers HIGH.
+    float previousPrice = array.size(pivotPrices) > 0 ? array.get(pivotPrices, array.size(pivotPrices) - 1) : close[right]
+    int previousType = array.size(pivotTypes) > 0 ? array.get(pivotTypes, array.size(pivotTypes) - 1) : 0
+    float highExcursion = math.abs(confirmedHigh - previousPrice) / math.max(confirmedATR, syminfo.mintick)
+    float lowExcursion = math.abs(confirmedLow - previousPrice) / math.max(confirmedATR, syminfo.mintick)
+    bool chooseHigh = highExcursion > lowExcursion or (highExcursion == lowExcursion and previousType != PIVOT_HIGH)
+    structuralPivotChanged := chooseHigh ? f_acceptPivot(PIVOT_HIGH, confirmedHigh, confirmedBar, confirmedATR) : f_acceptPivot(PIVOT_LOW, confirmedLow, confirmedBar, confirmedATR)
+else if hasHigh
+    structuralPivotChanged := f_acceptPivot(PIVOT_HIGH, confirmedHigh, confirmedBar, confirmedATR)
+else if hasLow
+    structuralPivotChanged := f_acceptPivot(PIVOT_LOW, confirmedLow, confirmedBar, confirmedATR)
+
+// Frozen prior-trend series ----------------------------------------------------
+float recentHigh = na
+float previousHigh = na
+float recentLow = na
+float previousLow = na
+int highCount = 0
+int lowCount = 0
+if array.size(pivotTypes) > 0
+    for scan = 0 to math.min(array.size(pivotTypes) - 1, 11)
+        if f_pivotType(scan) == PIVOT_HIGH and highCount < 2
+            if highCount == 0
+                recentHigh := f_pivotPrice(scan)
             else
-                sh2:=f_p(z)
-            hc+=1
-        if f_t(z)==-1 and lc<2
-            if lc==0
-                sl1:=f_p(z)
+                previousHigh := f_pivotPrice(scan)
+            highCount += 1
+        if f_pivotType(scan) == PIVOT_LOW and lowCount < 2
+            if lowCount == 0
+                recentLow := f_pivotPrice(scan)
             else
-                sl2:=f_p(z)
-            lc+=1
-int structure=not na(sh2) and not na(sl2)?(sh1>sh2 and sl1>sl2?2:sh1<sh2 and sl1<sl2?-2:0):0
-int slopeScore=nSlope>slopeThr?1:nSlope< -slopeThr?-1:0
-float emaNS=(fast-fast[3])/math.max(atr,syminfo.mintick)/3
-int emaScore=fast>slow and emaNS>slopeThr*.25?1:fast<slow and emaNS< -slopeThr*.25?-1:0
-int trendScore=structure+slopeScore+emaScore
-int trendState=trendScore>=upScore?1:trendScore<=downScore?-1:0
-float trendStrength=f_clamp(math.abs(trendScore)/4*70+math.min(math.abs(nSlope)/slopeThr,2)*15)
+                previousLow := f_pivotPrice(scan)
+            lowCount += 1
+int structureScore = 0
+if not na(previousHigh) and not na(previousLow)
+    structureScore := recentHigh > previousHigh and recentLow > previousLow ? 2 : recentHigh < previousHigh and recentLow < previousLow ? -2 : 0
+int slopeScore = normalizedTrendSlope > slopeThr ? 1 : normalizedTrendSlope < -slopeThr ? -1 : 0
+float emaNormalizedSlope = (fast - fast[3]) / math.max(atr, syminfo.mintick) / 3.0
+int emaScore = fast > slow and emaNormalizedSlope > slopeThr * 0.25 ? 1 : fast < slow and emaNormalizedSlope < -slopeThr * 0.25 ? -1 : 0
+int trendScore = structureScore + slopeScore + emaScore
+int trendState = trendScore >= upScore ? TREND_UP : trendScore <= downScore ? TREND_DOWN : TREND_ANY
+float trendStrength = f_clamp(math.abs(trendScore) / 4.0 * 70.0 + math.min(math.abs(normalizedTrendSlope) / slopeThr, 2.0) * 15.0)
 
-// Candidate result model: parallel arrays are more reliable than nested UDTs.
-var array<string> cName=array.new_string()
-var array<string> cCode=array.new_string()
-var array<int> cStart=array.new_int()
-var array<int> cEnd=array.new_int()
-var array<int> cStatus=array.new_int()
-var array<int> cExpected=array.new_int()
-var array<int> cPrior=array.new_int()
-var array<float> cTrend=array.new_float()
-var array<float> cLevel=array.new_float()
-var array<float> cInvalid=array.new_float()
-var array<float> cGeom=array.new_float()
-var array<string> cSig=array.new_string()
-var array<string> emitted=array.new_string()
-var array<label> labels=array.new_label()
-var array<line> lines=array.new_line()
-var int serial=0, activeCount=0
-var string latestName="—", latestClass="—", latestStatus="—", latestTrend="—", latestID="—"
-var float latestQuality=na, latestLevel=na, latestATR=na, latestStrength=na
+f_prior(int patternStart) =>
+    int offset = bar_index - patternStart + 1
+    int priorState = TREND_ANY
+    float priorStrength = 0.0
+    bool available = offset >= 0 and offset <= 999
+    if available
+        priorState := trendState[offset]
+        priorStrength := trendStrength[offset]
+    [priorState, priorStrength, available]
 
-f_prior(int start)=>
-    int off=bar_index-start+1
-    int st=off>=0 and off<=999?trendState[off]:0
-    float strength=off>=0 and off<=999?trendStrength[off]:0
-    [st,strength]
-f_trendName(int t)=>t==1?"UP":t==-1?"DOWN":"SIDEWAYS"
-f_class(int prior,int dir,string name)=>
-    bool bilateral=str.contains(name,"Triangle") or name=="Rectangle" or str.contains(name,"Megaphone")
-    dir==1?(prior==-1?"BULLISH_REVERSAL":prior==1?"BULLISH_CONTINUATION":bilateral?"BULLISH_BREAKOUT":"BULLISH_BREAKOUT"):(prior==1?"BEARISH_REVERSAL":prior==-1?"BEARISH_CONTINUATION":bilateral?"BEARISH_BREAKOUT":"BEARISH_BREAKOUT")
-f_required(string name)=>str.contains(name,"Top") or str.contains(name,"Bottom") or str.contains(name,"Shoulders") or str.contains(name,"Bump") or str.contains(name,"Cup")
-f_contextOK(string name,int prior,float strength)=>
-    int need=str.contains(name,"Top") or name=="Head and Shoulders" or name=="Bump and Run Top"?1:str.contains(name,"Bottom") or name=="Inverse Head and Shoulders" or name=="Bump and Run Bottom"?-1:0
-    not f_required(name) or (prior==need and strength>=minTrend)
-f_signature(string code,int s,int e)=>code+":"+str.tostring(s)+":"+str.tostring(e)
+f_trendName(int value) =>
+    value == TREND_UP ? "UP" : value == TREND_DOWN ? "DOWN" : "SIDEWAYS"
 
-f_offer(string name,string code,int s,int e,int expected,float level,float invalid,float geom,string pivsig)=>
-    [prior,strength]=f_prior(s)
-    string sig=f_signature(code,s,e)+":"+pivsig
-    bool duplicate=false
-    if array.size(cSig)>0
-        for q=0 to array.size(cSig)-1
-            bool same=array.get(cCode,q)==code
-            bool overlap=math.min(e,array.get(cEnd,q))-math.max(s,array.get(cStart,q))>=(e-s)*.65
-            if same and (array.get(cSig,q)==sig or overlap)
-                duplicate:=true
-                if geom>array.get(cGeom,q) and array.get(cStatus,q)==0
-                    array.set(cGeom,q,geom), array.set(cLevel,q,level), array.set(cInvalid,q,invalid), array.set(cEnd,q,e), array.set(cSig,q,sig)
-    bool accepted=not duplicate and f_contextOK(name,prior,strength) and (geom>=minQuality or showLow)
-    if accepted
-        if array.size(cName)>=maxActive
-            array.shift(cName),array.shift(cCode),array.shift(cStart),array.shift(cEnd),array.shift(cStatus),array.shift(cExpected),array.shift(cPrior),array.shift(cTrend),array.shift(cLevel),array.shift(cInvalid),array.shift(cGeom),array.shift(cSig)
-        array.push(cName,name),array.push(cCode,code),array.push(cStart,s),array.push(cEnd,e),array.push(cStatus,0),array.push(cExpected,expected),array.push(cPrior,prior),array.push(cTrend,strength),array.push(cLevel,level),array.push(cInvalid,invalid),array.push(cGeom,geom),array.push(cSig,sig)
+// Candidate model -------------------------------------------------------------
+type PatternCandidate
+    string name
+    string code
+    int startBar
+    int endBar
+    int knowledgeBar
+    int status
+    int requiredTrend
+    int expectedBreakout
+    int contextMode
+    int priorTrend
+    float priorStrength
+    int upperBar1
+    float upperPrice1
+    int upperBar2
+    float upperPrice2
+    int lowerBar1
+    float lowerPrice1
+    int lowerBar2
+    float lowerPrice2
+    int invalidMode
+    float invalidLevel
+    float geometryScore
+    string pivotSignature
+    label formingLabel
+
+var array<PatternCandidate> candidates = array.new<PatternCandidate>()
+var array<string> emittedIDs = array.new_string()
+var array<label> managedLabels = array.new_label()
+var array<line> managedLines = array.new_line()
+var int serial = 0
+var int activeCount = 0
+var string latestName = "—"
+var string latestClass = "—"
+var string latestStatus = "—"
+var string latestTrend = "—"
+var string latestID = "—"
+var float latestQuality = na
+var float latestLevel = na
+var float latestATR = na
+var float latestStrength = na
+
+f_manageLabel(label handle) =>
+    if not na(handle)
+        array.push(managedLabels, handle)
+        while array.size(managedLabels) > 120
+            label.delete(array.shift(managedLabels))
+
+f_manageLine(line handle) =>
+    if not na(handle)
+        array.push(managedLines, handle)
+        while array.size(managedLines) > 100
+            line.delete(array.shift(managedLines))
+
+f_deleteForming(PatternCandidate candidate) =>
+    if not na(candidate.formingLabel)
+        label.delete(candidate.formingLabel)
+        candidate.formingLabel := na
+
+f_candidateShift() =>
+    if array.size(candidates) > 0
+        PatternCandidate removed = array.shift(candidates)
+        f_deleteForming(removed)
+
+f_boundaryUpper(PatternCandidate candidate, int targetBar) =>
+    f_lineValueAt(candidate.upperBar1, candidate.upperPrice1, candidate.upperBar2, candidate.upperPrice2, targetBar)
+
+f_boundaryLower(PatternCandidate candidate, int targetBar) =>
+    f_lineValueAt(candidate.lowerBar1, candidate.lowerPrice1, candidate.lowerBar2, candidate.lowerPrice2, targetBar)
+
+f_contextValid(int requiredTrend, float priorStrength, int contextMode, int priorTrend) =>
+    bool trendMatches = requiredTrend == TREND_ANY or priorTrend == requiredTrend
+    bool strengthRequired = requiredTrend != TREND_ANY or contextMode == MODE_REVERSAL or contextMode == MODE_CONTINUATION
+    trendMatches and (not strengthRequired or priorStrength >= minTrend)
+
+f_classification(PatternCandidate candidate, int direction) =>
+    string result = direction == BREAK_UP ? "BULLISH_BREAKOUT" : "BEARISH_BREAKOUT"
+    if candidate.contextMode == MODE_CONTINUATION
+        result := direction == BREAK_UP ? "BULLISH_CONTINUATION" : "BEARISH_CONTINUATION"
+    else if candidate.contextMode == MODE_REVERSAL
+        result := direction == BREAK_UP ? "BULLISH_REVERSAL" : "BEARISH_REVERSAL"
+    else if candidate.contextMode == MODE_CONTEXTUAL
+        result := direction == BREAK_UP ? (candidate.priorTrend == TREND_DOWN ? "BULLISH_REVERSAL" : candidate.priorTrend == TREND_UP ? "BULLISH_CONTINUATION" : "BULLISH_BREAKOUT") : (candidate.priorTrend == TREND_UP ? "BEARISH_REVERSAL" : candidate.priorTrend == TREND_DOWN ? "BEARISH_CONTINUATION" : "BEARISH_BREAKOUT")
+    result
+
+f_candidateSimilar(PatternCandidate oldCandidate, PatternCandidate newCandidate) =>
+    bool exactSignature = oldCandidate.pivotSignature == newCandidate.pivotSignature
+    float overlap = f_overlapRatio(oldCandidate.startBar, oldCandidate.endBar, newCandidate.startBar, newCandidate.endBar)
+    float oldUpper = f_boundaryUpper(oldCandidate, newCandidate.endBar)
+    float newUpper = f_boundaryUpper(newCandidate, newCandidate.endBar)
+    float oldLower = f_boundaryLower(oldCandidate, newCandidate.endBar)
+    float newLower = f_boundaryLower(newCandidate, newCandidate.endBar)
+    bool upperSimilar = na(oldUpper) and na(newUpper) or not na(oldUpper) and not na(newUpper) and math.abs(oldUpper - newUpper) <= levelTolerance
+    bool lowerSimilar = na(oldLower) and na(newLower) or not na(oldLower) and not na(newLower) and math.abs(oldLower - newLower) <= levelTolerance
+    bool closeStart = math.abs(oldCandidate.startBar - newCandidate.startBar) <= right * 2
+    oldCandidate.code == newCandidate.code and (exactSignature or (overlap >= 0.70 and closeStart and upperSimilar and lowerSimilar))
+
+f_offer(string name, string code, int startBar, int endBar, int requiredTrend, int expectedBreakout, int contextMode, int upperBar1, float upperPrice1, int upperBar2, float upperPrice2, int lowerBar1, float lowerPrice1, int lowerBar2, float lowerPrice2, int invalidMode, float invalidLevel, float geometryScore, string pivotSignature) =>
+    [priorTrend, priorStrength, historyAvailable] = f_prior(startBar)
+    bool structurallyComplete = historyAvailable and endBar >= startBar and not na(geometryScore)
+    bool contextAccepted = structurallyComplete and f_contextValid(requiredTrend, priorStrength, contextMode, priorTrend)
+    bool qualityAccepted = geometryScore >= minQuality or showLow
+    PatternCandidate proposed = PatternCandidate.new(name, code, startBar, endBar, bar_index, STATUS_FORMING, requiredTrend, expectedBreakout, contextMode, priorTrend, priorStrength, upperBar1, upperPrice1, upperBar2, upperPrice2, lowerBar1, lowerPrice1, lowerBar2, lowerPrice2, invalidMode, invalidLevel, geometryScore, pivotSignature, na)
+    int duplicateIndex = -1
+    if array.size(candidates) > 0
+        for index = 0 to array.size(candidates) - 1
+            PatternCandidate oldCandidate = array.get(candidates, index)
+            if f_candidateSimilar(oldCandidate, proposed)
+                duplicateIndex := index
+    bool accepted = contextAccepted and qualityAccepted
+    if accepted and duplicateIndex >= 0
+        PatternCandidate oldCandidate = array.get(candidates, duplicateIndex)
+        if proposed.geometryScore > oldCandidate.geometryScore and oldCandidate.status == STATUS_FORMING
+            f_deleteForming(oldCandidate)
+            if showForming and showLabels
+                proposed.formingLabel := label.new(bar_index, close, code + " FORMING\nQ:" + str.tostring(math.round(geometryScore)), style = label.style_label_left, color = color.new(color.orange, 25), textcolor = color.white, size = size.tiny)
+                f_manageLabel(proposed.formingLabel)
+            // Full-object replacement prevents mixed start/trend/boundary metadata.
+            array.set(candidates, duplicateIndex, proposed)
+    else if accepted
+        while array.size(candidates) >= maxActive
+            f_candidateShift()
         if showForming and showLabels
-            label lb=label.new(e,level,code+" FORMING\nQ:"+str.tostring(math.round(geom)),style=label.style_label_left,color=color.new(color.orange,25),textcolor=color.white,size=size.tiny)
-            array.push(labels,lb)
-    if debugMode and not accepted and not duplicate
-        label.new(bar_index,high,"REJECT "+code+"\nTrend "+f_trendName(prior)+" "+str.tostring(math.round(strength))+"\nTol "+str.tostring(tol,format.mintick)+" G "+str.tostring(math.round(geom))+"\n"+(not f_contextOK(name,prior,strength)?"context":"quality"),style=label.style_label_down,color=color.new(color.gray,60),textcolor=color.white,size=size.tiny)
+            proposed.formingLabel := label.new(bar_index, close, code + " FORMING\nQ:" + str.tostring(math.round(geometryScore)), style = label.style_label_left, color = color.new(color.orange, 25), textcolor = color.white, size = size.tiny)
+            f_manageLabel(proposed.formingLabel)
+        array.push(candidates, proposed)
+    else if debugMode and duplicateIndex < 0
+        string reason = not structurallyComplete ? "history" : not contextAccepted ? "context" : "quality"
+        label debugLabel = label.new(bar_index, high, "REJECT " + code + "\nTrend " + f_trendName(priorTrend) + " " + str.tostring(math.round(priorStrength)) + "\nTol " + str.tostring(levelTolerance, format.mintick) + " G " + str.tostring(math.round(geometryScore)) + "\n" + reason, style = label.style_label_down, color = color.new(color.gray, 60), textcolor = color.white, size = size.tiny)
+        f_manageLabel(debugLabel)
 
-// Quadratic fit: evenly sampled closes over a bounded interval. Returns curvature
-// sign and R²; this is used instead of reducing rounded structures to 3 pivots.
-f_curve(int s,int e)=>
-    int n=math.min(e-s+1,80), off=bar_index-e
-    float sx=0.,sx2=0.,sx3=0.,sx4=0.,sy=0.,sxy=0.,sx2y=0.
-    if n>=7 and off>=0
-        for k=0 to n-1
-            float x=k, y=close[off+n-1-k]
-            sx+=x,sx2+=x*x,sx3+=x*x*x,sx4+=x*x*x*x,sy+=y,sxy+=x*y,sx2y+=x*x*y
-    float det=n*(sx2*sx4-sx3*sx3)-sx*(sx*sx4-sx2*sx3)+sx2*(sx*sx3-sx2*sx2)
-    float a=math.abs(det)>1e-10?(n*(sx2*sx2y-sx3*sxy)-sx*(sx*sx2y-sx2*sxy)+sy*(sx*sx3-sx2*sx2))/det:0
-    float b=math.abs(det)>1e-10?(n*(sxy*sx4-sx2y*sx3)-sy*(sx*sx4-sx2*sx3)+sx2*(sx*sx2y-sxy*sx2))/det:0
-    float c=math.abs(det)>1e-10?(sy*(sx2*sx4-sx3*sx3)-sx*(sxy*sx4-sx2y*sx3)+sx2*(sxy*sx3-sx2y*sx2))/det:0
-    float mean=n>0?sy/n:0, ss=0.,err=0.
-    if n>=7 and off>=0
-        for k=0 to n-1
-            float y=close[off+n-1-k], fit=a*k*k+b*k+c
-            ss+=math.pow(y-mean,2),err+=math.pow(y-fit,2)
-    [a,ss>0?1-err/ss:0]
+// Geometry detection is event-driven by a confirmed append or extreme replacement.
+if structuralPivotChanged and array.size(pivotTypes) >= 5
+    int patternStart = f_pivotBar(4)
+    int patternEnd = f_pivotBar(0)
+    float a = f_pivotPrice(4)
+    float b = f_pivotPrice(3)
+    float c = f_pivotPrice(2)
+    float d = f_pivotPrice(1)
+    float e = f_pivotPrice(0)
+    int barA = f_pivotBar(4)
+    int barB = f_pivotBar(3)
+    int barC = f_pivotBar(2)
+    int barD = f_pivotBar(1)
+    int barE = f_pivotBar(0)
+    float patternATR = f_pivotATR(0)
+    string signature = str.tostring(barA) + "," + str.tostring(barB) + "," + str.tostring(barC) + "," + str.tostring(barD) + "," + str.tostring(barE)
+    float temporalSymmetry = 100.0 - math.abs((barC - barA) - (barE - barC)) / math.max(patternEnd - patternStart, 1) * 100.0
+    bool highSequence = f_pivotType(4) == PIVOT_HIGH
+    float upper1 = highSequence ? a : b
+    float upper2 = highSequence ? e : d
+    float lower1 = highSequence ? b : a
+    float lower2 = highSequence ? d : e
+    int upperBar1 = highSequence ? barA : barB
+    int upperBar2 = highSequence ? barE : barD
+    int lowerBar1 = highSequence ? barB : barA
+    int lowerBar2 = highSequence ? barD : barE
+    float upperSlope = f_normalizedSlope(upper1, upper2, upperBar1, upperBar2, patternATR)
+    float lowerSlope = f_normalizedSlope(lower1, lower2, lowerBar1, lowerBar2, patternATR)
+    int commonStart = math.max(upperBar1, lowerBar1)
+    int commonEnd = math.min(upperBar2, lowerBar2)
+    float startWidth = f_lineValueAt(upperBar1, upper1, upperBar2, upper2, commonStart) - f_lineValueAt(lowerBar1, lower1, lowerBar2, lower2, commonStart)
+    float endWidth = f_lineValueAt(upperBar1, upper1, upperBar2, upper2, commonEnd) - f_lineValueAt(lowerBar1, lower1, lowerBar2, lower2, commonEnd)
+    bool contracting = endWidth > 0.0 and endWidth < startWidth
+    bool expanding = startWidth > 0.0 and endWidth > startWidth
+    float flatThreshold = 0.025
+    float boundaryQuality = f_clamp(100.0 - (math.abs(upperSlope) + math.abs(lowerSlope)) * 120.0)
 
-// Geometry engine runs only on a newly confirmed pivot -------------------------
-float ph=ta.pivothigh(high,left,right), pl=ta.pivotlow(low,left,right)
-bool newPivot=not na(ph) or not na(pl)
-if newPivot
-    int typ=not na(ph)?1:-1
-    float pr=not na(ph)?ph:pl
-    int pb=bar_index-right
-    // If both occur together, retain the more extreme event deterministically.
-    array.push(pType,typ),array.push(pPrice,pr),array.push(pBar,pb),array.push(pAtr,atr[right])
-    if array.size(pType)>maxP
-        array.shift(pType),array.shift(pPrice),array.shift(pBar),array.shift(pAtr)
+    // Equal-level reversal structures use explicit static neckline boundaries.
+    if fDouble and f_pivotType(2) == f_pivotType(0) and f_equalLevel(c, e, patternATR)
+        bool isTop = f_pivotType(0) == PIVOT_HIGH
+        float geometry = f_clamp(75.0 + 15.0 * (1.0 - math.abs(c - e) / math.max(f_tolerance(patternATR), syminfo.mintick)) + temporalSymmetry * 0.10)
+        if isTop
+            f_offer("Double Top", "DT", barC, barE, TREND_UP, BREAK_DOWN, MODE_REVERSAL, barD, c + f_tolerance(patternATR), barD, c + f_tolerance(patternATR), barD, d, barD, d, INVALID_STATIC, math.max(c, e) + f_tolerance(patternATR), geometry, signature)
+        else
+            f_offer("Double Bottom", "DB", barC, barE, TREND_DOWN, BREAK_UP, MODE_REVERSAL, barD, d, barD, d, barD, c - f_tolerance(patternATR), barD, c - f_tolerance(patternATR), INVALID_STATIC, math.min(c, e) - f_tolerance(patternATR), geometry, signature)
+    if fTriple and f_pivotType(4) == f_pivotType(2) and f_pivotType(2) == f_pivotType(0) and f_equalLevel(a, c, patternATR) and f_equalLevel(c, e, patternATR)
+        bool isTop = f_pivotType(0) == PIVOT_HIGH
+        if isTop
+            float support = math.min(b, d)
+            f_offer("Triple Top", "TT", barA, barE, TREND_UP, BREAK_DOWN, MODE_REVERSAL, barA, math.max(a, math.max(c, e)), barE, math.max(a, math.max(c, e)), barB, support, barD, support, INVALID_STATIC, math.max(a, math.max(c, e)) + f_tolerance(patternATR), 88.0, signature)
+        else
+            float resistance = math.max(b, d)
+            f_offer("Triple Bottom", "TB", barA, barE, TREND_DOWN, BREAK_UP, MODE_REVERSAL, barB, resistance, barD, resistance, barA, math.min(a, math.min(c, e)), barE, math.min(a, math.min(c, e)), INVALID_STATIC, math.min(a, math.min(c, e)) - f_tolerance(patternATR), 88.0, signature)
 
-if newPivot and array.size(pType)>=5
-    int n=array.size(pType), s4=f_b(4), e=f_b(0)
-    float a=f_p(4),b=f_p(3),c=f_p(2),d=f_p(1),ee=f_p(0), at=array.get(pAtr,n-1)
-    string sig=str.tostring(s4)+","+str.tostring(f_b(3))+","+str.tostring(f_b(2))+","+str.tostring(f_b(1))+","+str.tostring(e)
-    float span=math.max(math.abs(c-b),at), sym=f_clamp(100-math.abs((f_b(2)-s4)-(e-f_b(2)))/math.max(e-s4,1)*100)
-    // Double / triple levels and neckline.
-    if fDouble and f_t(4)==f_t(2) and f_t(2)==f_t(0) and f_eq(c,ee,at)
-        bool top=f_t(0)==1
-        float q=f_clamp(70+20*(1-math.abs(c-ee)/math.max(tol,syminfo.mintick))+sym*.1)
-        f_offer(top?"Double Top":"Double Bottom",top?"DT":"DB",f_b(2),e,top?-1:1,d,top?math.max(c,ee)+tol:math.min(c,ee)-tol,q,sig)
-    if fTriple and f_t(4)==f_t(2) and f_t(2)==f_t(0) and f_eq(a,c,at) and f_eq(c,ee,at)
-        bool top=f_t(0)==1
-        f_offer(top?"Triple Top":"Triple Bottom",top?"TT":"TB",s4,e,top?-1:1,top?math.min(b,d):math.max(b,d),top?math.max(a,math.max(c,ee))+tol:math.min(a,math.min(c,ee))-tol,88,sig)
-    // H&S: three alternating peaks/troughs, middle head, similar shoulders.
-    if fHns and f_t(4)==f_t(2) and f_t(2)==f_t(0) and f_eq(a,ee,at)
-        bool h=f_t(0)==1 and c>a+tol, ih=f_t(0)==-1 and c<a-tol
-        if h or ih
-            float neck=(b+d)/2
-            f_offer(h?"Head and Shoulders":"Inverse Head and Shoulders",h?"HNS":"IHNS",s4,e,h?-1:1,neck,h?c+tol:c-tol,f_clamp(75+sym*.2),sig)
-    // Boundary slopes from same-type pivots, always ATR/bar normalized.
-    float upper1=f_t(4)==1?a:b, upper2=f_t(0)==1?ee:d, lower1=f_t(4)==-1?a:b, lower2=f_t(0)==-1?ee:d
-    int ub1=f_t(4)==1?s4:f_b(3),ub2=f_t(0)==1?e:f_b(1),lb1=f_t(4)==-1?s4:f_b(3),lb2=f_t(0)==-1?e:f_b(1)
-    float us=f_ns(upper1,upper2,ub1,ub2,at), ls=f_ns(lower1,lower2,lb1,lb2,at), r0=upper1-lower1,r1=upper2-lower2
-    bool contracting=r1<r0 and r1>0, expanding=r1>r0
-    float flat=.025, boundaryQ=f_clamp(100-(math.abs(us)+math.abs(ls))*120)
-    if fWedge and contracting
-        if us>0 and ls>us
-            f_offer("Rising Wedge","RW",s4,e,-1,lower2,upper2+tol,f_clamp(72+(r0-r1)/math.max(r0,at)*25),sig)
-        if us<0 and ls<0 and us>ls
-            f_offer("Falling Wedge","FW",s4,e,1,upper2,lower2-tol,f_clamp(72+(r0-r1)/math.max(r0,at)*25),sig)
-    if fTri and contracting
-        if math.abs(us)<flat and ls>flat
-            f_offer("Ascending Triangle","AT",s4,e,1,upper2,lower2-tol,f_clamp(75+boundaryQ*.15),sig)
-        if math.abs(ls)<flat and us< -flat
-            f_offer("Descending Triangle","DTR",s4,e,-1,lower2,upper2+tol,f_clamp(75+boundaryQ*.15),sig)
-        if us< -flat and ls>flat
-            f_offer("Symmetrical Triangle","ST",s4,e,0,(upper2+lower2)/2,na,f_clamp(78+(r0-r1)/math.max(r0,at)*20),sig)
-    if fRect and math.abs(us)<flat and math.abs(ls)<flat and f_eq(upper1,upper2,at) and f_eq(lower1,lower2,at)
-        f_offer("Rectangle","RECT",s4,e,0,(upper2+lower2)/2,na,f_clamp(82+boundaryQ*.15),sig)
-    if fMega and expanding and us>0 and ls<0
-        f_offer("Megaphone / Broadening","MEGA",s4,e,0,(upper2+lower2)/2,na,f_clamp(70+(r1-r0)/math.max(r0,at)*20),sig)
-    // Strong pole plus small parallel channel (flag) or contraction (pennant).
-    int poleStart=s4-math.max(e-s4,5), poleOff=bar_index-poleStart
-    float poleMove=poleOff>=0 and poleOff<=999?close[bar_index-e]-close[poleOff]:0, poleATR=math.abs(poleMove)/math.max(at,syminfo.mintick), consRange=ta.highest(high,math.max(bar_index-s4+1,1))-ta.lowest(low,math.max(bar_index-s4+1,1))
-    bool small=poleATR>=minPoleATR and consRange<=math.abs(poleMove)*maxFlagRatio
-    if fFlag and small and math.abs(us-ls)<.04
-        bool bull=poleMove>0 and us<=flat, bear=poleMove<0 and ls>=-flat
-        if bull or bear
-            f_offer(bull?"Bullish Flag":"Bearish Flag",bull?"BFLAG":"SFLAG",s4,e,bull?1:-1,bull?upper2:lower2,bull?lower2-tol:upper2+tol,f_clamp(70+math.min(poleATR,5)*5+boundaryQ*.1),sig)
-    if fPennant and small and contracting and us<0 and ls>0
-        bool bull=poleMove>0
-        f_offer(bull?"Bullish Pennant":"Bearish Pennant",bull?"BPEN":"SPEN",s4,e,bull?1:-1,bull?upper2:lower2,bull?lower2-tol:upper2+tol,f_clamp(72+math.min(poleATR,5)*5),sig)
-    // V requires steep, opposite normalized legs and temporal symmetry.
+    // H&S uses the actual two neckline pivots and projects their line.
+    if fHns and f_pivotType(4) == f_pivotType(2) and f_pivotType(2) == f_pivotType(0) and f_equalLevel(a, e, patternATR)
+        bool headAndShoulders = f_pivotType(0) == PIVOT_HIGH and c > a + f_tolerance(patternATR)
+        bool inverseHeadAndShoulders = f_pivotType(0) == PIVOT_LOW and c < a - f_tolerance(patternATR)
+        if headAndShoulders
+            f_offer("Head and Shoulders", "HNS", barA, barE, TREND_UP, BREAK_DOWN, MODE_REVERSAL, barC, c, barC, c, barB, b, barD, d, INVALID_STATIC, c + f_tolerance(patternATR), f_clamp(75.0 + temporalSymmetry * 0.20), signature)
+        if inverseHeadAndShoulders
+            f_offer("Inverse Head and Shoulders", "IHNS", barA, barE, TREND_DOWN, BREAK_UP, MODE_REVERSAL, barB, b, barD, d, barC, c, barC, c, INVALID_STATIC, c - f_tolerance(patternATR), f_clamp(75.0 + temporalSymmetry * 0.20), signature)
+
+    // True mirrored contracting wedge inequalities.
+    if fWedge and contracting and not na(upperSlope) and not na(lowerSlope)
+        if lowerSlope > upperSlope and upperSlope > 0.0
+            f_offer("Rising Wedge", "RW", patternStart, patternEnd, TREND_ANY, BREAK_DOWN, MODE_CONTEXTUAL, upperBar1, upper1, upperBar2, upper2, lowerBar1, lower1, lowerBar2, lower2, INVALID_OPPOSITE_BOUNDARY, na, f_clamp(72.0 + (startWidth - endWidth) / math.max(startWidth, patternATR) * 25.0), signature)
+        if upperSlope < lowerSlope and lowerSlope < 0.0
+            f_offer("Falling Wedge", "FW", patternStart, patternEnd, TREND_ANY, BREAK_UP, MODE_CONTEXTUAL, upperBar1, upper1, upperBar2, upper2, lowerBar1, lower1, lowerBar2, lower2, INVALID_OPPOSITE_BOUNDARY, na, f_clamp(72.0 + (startWidth - endWidth) / math.max(startWidth, patternATR) * 25.0), signature)
+
+    if fTri and contracting and not na(upperSlope) and not na(lowerSlope)
+        if math.abs(upperSlope) < flatThreshold and lowerSlope > flatThreshold
+            f_offer("Ascending Triangle", "AT", patternStart, patternEnd, TREND_ANY, BREAK_UP, MODE_CONTEXTUAL, upperBar1, upper1, upperBar2, upper2, lowerBar1, lower1, lowerBar2, lower2, INVALID_OPPOSITE_BOUNDARY, na, f_clamp(75.0 + boundaryQuality * 0.15), signature)
+        if math.abs(lowerSlope) < flatThreshold and upperSlope < -flatThreshold
+            f_offer("Descending Triangle", "DTR", patternStart, patternEnd, TREND_ANY, BREAK_DOWN, MODE_CONTEXTUAL, upperBar1, upper1, upperBar2, upper2, lowerBar1, lower1, lowerBar2, lower2, INVALID_OPPOSITE_BOUNDARY, na, f_clamp(75.0 + boundaryQuality * 0.15), signature)
+        if upperSlope < -flatThreshold and lowerSlope > flatThreshold
+            f_offer("Symmetrical Triangle", "ST", patternStart, patternEnd, TREND_ANY, BREAK_BILATERAL, MODE_BILATERAL, upperBar1, upper1, upperBar2, upper2, lowerBar1, lower1, lowerBar2, lower2, INVALID_NONE, na, f_clamp(78.0 + (startWidth - endWidth) / math.max(startWidth, patternATR) * 20.0), signature)
+
+    if fRect and math.abs(upperSlope) < flatThreshold and math.abs(lowerSlope) < flatThreshold and f_equalLevel(upper1, upper2, patternATR) and f_equalLevel(lower1, lower2, patternATR)
+        f_offer("Rectangle", "RECT", patternStart, patternEnd, TREND_ANY, BREAK_BILATERAL, MODE_CONTEXTUAL, upperBar1, upper1, upperBar2, upper2, lowerBar1, lower1, lowerBar2, lower2, INVALID_NONE, na, f_clamp(82.0 + boundaryQuality * 0.15), signature)
+
+    if fMega and expanding and upperSlope > 0.0 and lowerSlope < 0.0
+        f_offer("Megaphone / Broadening", "MEGA", patternStart, patternEnd, TREND_ANY, BREAK_BILATERAL, MODE_CONTEXTUAL, upperBar1, upper1, upperBar2, upper2, lowerBar1, lower1, lowerBar2, lower2, INVALID_NONE, na, f_clamp(70.0 + (endWidth - startWidth) / math.max(startWidth, patternATR) * 20.0), signature)
+
+    // V geometry uses the actual adjacent b-c and c-d legs, never a-c/c-e.
     if fV
-        float leg1=f_ns(a,c,s4,f_b(2),at), leg2=f_ns(c,ee,f_b(2),e,at)
-        bool vt=f_t(2)==1 and leg1>slopeThr*3 and leg2< -slopeThr*3, vb=f_t(2)==-1 and leg1< -slopeThr*3 and leg2>slopeThr*3
-        if vt or vb
-            f_offer(vt?"V-Top":"V-Bottom",vt?"VT":"VB",s4,e,vt?-1:1,vt?math.min(b,d):math.max(b,d),vt?c+tol:c-tol,f_clamp(65+sym*.25+math.min(math.abs(leg1+ -leg2),1)*10),sig)
-    // Rounding and cups: quadratic curvature + fit quality.
+        float leftLeg = f_normalizedSlope(b, c, barB, barC, patternATR)
+        float rightLeg = f_normalizedSlope(c, d, barC, barD, patternATR)
+        int leftBars = barC - barB
+        int rightBars = barD - barC
+        float vSymmetry = math.min(leftBars, rightBars) * 1.0 / math.max(leftBars, rightBars)
+        bool vTop = f_pivotType(2) == PIVOT_HIGH and leftLeg > slopeThr * 3.0 and rightLeg < -slopeThr * 3.0 and vSymmetry >= vSymmetryMin
+        bool vBottom = f_pivotType(2) == PIVOT_LOW and leftLeg < -slopeThr * 3.0 and rightLeg > slopeThr * 3.0 and vSymmetry >= vSymmetryMin
+        if vTop
+            float vSupport = math.min(b, d)
+            f_offer("V-Top", "VT", barB, barD, TREND_UP, BREAK_DOWN, MODE_REVERSAL, barC, c, barC, c, barB, vSupport, barD, vSupport, INVALID_STATIC, c + f_tolerance(patternATR), f_clamp(65.0 + vSymmetry * 25.0), signature)
+        if vBottom
+            float vResistance = math.max(b, d)
+            f_offer("V-Bottom", "VB", barB, barD, TREND_DOWN, BREAK_UP, MODE_REVERSAL, barB, vResistance, barD, vResistance, barC, c, barC, c, INVALID_STATIC, c - f_tolerance(patternATR), f_clamp(65.0 + vSymmetry * 25.0), signature)
+
+    // Curvature families retain chronological quadratic fit and minimum R².
     if fRound or fCup
-        [curve,r2]=f_curve(s4,e)
-        bool rt=curve<0 and r2>=minR2, rb=curve>0 and r2>=minR2
-        if fRound and (rt or rb)
-            f_offer(rt?"Rounding Top":"Rounding Bottom",rt?"RT":"RB",s4,e,rt?-1:1,rt?math.min(b,d):math.max(b,d),rt?c+tol:c-tol,f_clamp(55+r2*40),sig)
-        bool rims=f_eq(a,ee,at), rounded=allowVCup or r2>=minR2
-        float depth=math.abs(c-(a+ee)/2), handle=math.abs(d-ee)
-        if fCup and rims and rounded and depth>at and handle<depth*.5
-            bool cup=curve>0 and f_t(2)==-1, inv=curve<0 and f_t(2)==1
-            if cup or inv
-                f_offer(cup?"Cup and Handle":"Inverted Cup and Handle",cup?"CUP":"ICUP",s4,e,cup?1:-1,(a+ee)/2,cup?c-tol:c+tol,f_clamp(60+r2*30+(1-handle/depth)*10),sig)
-    // Bump/run approximation: accelerated middle excursion then lead-in break.
-    if fBump
-        float lead=f_ns(a,b,s4,f_b(3),at), bump=f_ns(b,c,f_b(3),f_b(2),at)
-        bool bt=lead>0 and bump>lead*1.8 and f_t(2)==1, bb=lead<0 and bump<lead*1.8 and f_t(2)==-1
-        if bt or bb
-            f_offer(bt?"Bump and Run Top":"Bump and Run Bottom",bt?"BRT":"BRB",s4,e,bt?-1:1,bt?d:b,bt?c+tol:c-tol,f_clamp(65+math.min(math.abs(bump-lead),1)*25),sig)
+        [curve, curveR2] = f_curve(patternStart, patternEnd)
+        bool roundedTop = not na(curve) and not na(curveR2) and curve < 0.0 and curveR2 >= minR2
+        bool roundedBottom = not na(curve) and not na(curveR2) and curve > 0.0 and curveR2 >= minR2
+        if fRound and roundedTop
+            f_offer("Rounding Top", "RT", patternStart, patternEnd, TREND_UP, BREAK_DOWN, MODE_REVERSAL, upperBar1, upper1, upperBar2, upper2, lowerBar1, lower1, lowerBar2, lower2, INVALID_STATIC, math.max(a, e) + f_tolerance(patternATR), f_clamp(55.0 + curveR2 * 40.0), signature)
+        if fRound and roundedBottom
+            f_offer("Rounding Bottom", "RB", patternStart, patternEnd, TREND_DOWN, BREAK_UP, MODE_REVERSAL, upperBar1, upper1, upperBar2, upper2, lowerBar1, lower1, lowerBar2, lower2, INVALID_STATIC, math.min(a, e) - f_tolerance(patternATR), f_clamp(55.0 + curveR2 * 40.0), signature)
+        [windowHigh, windowLow, rangeValid] = f_windowRange(patternStart, patternEnd)
+        bool rimsSimilar = f_equalLevel(a, e, patternATR)
+        float bullishDepth = rangeValid ? (a + e) / 2.0 - windowLow : na
+        float bearishDepth = rangeValid ? windowHigh - (a + e) / 2.0 : na
+        float bullishHandleDepth = (a + e) / 2.0 - d
+        float bearishHandleDepth = d - (a + e) / 2.0
+        bool smoothCup = allowVCup ? roundedBottom : roundedBottom and curveR2 >= math.max(minR2, 0.70)
+        bool smoothInvertedCup = allowVCup ? roundedTop : roundedTop and curveR2 >= math.max(minR2, 0.70)
+        bool cupGeometry = smoothCup and rimsSimilar and f_pivotType(4) == PIVOT_HIGH and bullishDepth > patternATR and d > windowLow + bullishDepth * 0.60 and bullishHandleDepth >= 0.0 and bullishHandleDepth < bullishDepth * 0.40
+        bool invertedCupGeometry = smoothInvertedCup and rimsSimilar and f_pivotType(4) == PIVOT_LOW and bearishDepth > patternATR and d < windowHigh - bearishDepth * 0.60 and bearishHandleDepth >= 0.0 and bearishHandleDepth < bearishDepth * 0.40
+        if fCup and cupGeometry
+            float rimResistance = math.max(a, e)
+            f_offer("Cup and Handle", "CUP", patternStart, patternEnd, TREND_UP, BREAK_UP, MODE_CONTINUATION, barA, rimResistance, barE, rimResistance, barD, d, barD, d, INVALID_STATIC, windowLow - f_tolerance(patternATR), f_clamp(60.0 + curveR2 * 30.0 + (1.0 - bullishHandleDepth / bullishDepth) * 10.0), signature)
+        if fCup and invertedCupGeometry
+            float rimSupport = math.min(a, e)
+            f_offer("Inverted Cup and Handle", "ICUP", patternStart, patternEnd, TREND_DOWN, BREAK_DOWN, MODE_CONTINUATION, barD, d, barD, d, barA, rimSupport, barE, rimSupport, INVALID_STATIC, windowHigh + f_tolerance(patternATR), f_clamp(60.0 + curveR2 * 30.0 + (1.0 - bearishHandleDepth / bearishDepth) * 10.0), signature)
 
-// Six-pivot expand-then-contract diamond approximation.
-if newPivot and fDiamond and array.size(pType)>=7
-    float rA=math.abs(f_p(5)-f_p(6)),rB=math.abs(f_p(3)-f_p(4)),rC=math.abs(f_p(0)-f_p(1)), at=array.get(pAtr,array.size(pAtr)-1)
-    if rB>rA and rC<rB
-        int s=f_b(6), e=f_b(0), expected=0
-        [pt,pts]=f_prior(s)
-        float dq=f_clamp(65+(rB-rA)/math.max(rA,at)*15+(rB-rC)/math.max(rB,at)*20)
-        // Reversal and continuation are distinct candidates over the same legal
-        // geometry. Their stored pre-pattern context and breakout direction decide.
-        if pt==1
-            f_offer("Diamond Top","DIA-T",s,e,-1,(f_p(0)+f_p(1))/2,na,dq,str.tostring(s)+":"+str.tostring(e))
-            f_offer("Continuation Diamond","DIA-C",s,e,1,(f_p(0)+f_p(1))/2,na,dq,str.tostring(s)+":"+str.tostring(e))
-        if pt==-1
-            f_offer("Diamond Bottom","DIA-B",s,e,1,(f_p(0)+f_p(1))/2,na,dq,str.tostring(s)+":"+str.tostring(e))
-            f_offer("Continuation Diamond","DIA-C",s,e,-1,(f_p(0)+f_p(1))/2,na,dq,str.tostring(s)+":"+str.tostring(e))
+// Flags and pennants need a preceding pivot: pole ends exactly at pattern start,
+// while consolidation measurements stop exactly at pattern end.
+if structuralPivotChanged and array.size(pivotTypes) >= 6
+    int poleStartBar = f_pivotBar(5)
+    int consolidationStart = f_pivotBar(4)
+    int consolidationEnd = f_pivotBar(0)
+    float poleStartPrice = f_pivotPrice(5)
+    float poleEndPrice = f_pivotPrice(4)
+    float poleATRValue = f_pivotATR(4)
+    float poleMove = poleEndPrice - poleStartPrice
+    float poleStrength = math.abs(poleMove) / math.max(poleATRValue, syminfo.mintick)
+    [consolidationHigh, consolidationLow, consolidationValid] = f_windowRange(consolidationStart, consolidationEnd)
+    float consolidationRange = consolidationValid ? consolidationHigh - consolidationLow : na
+    bool smallConsolidation = consolidationValid and poleStrength >= minPoleATR and consolidationRange <= math.abs(poleMove) * maxFlagRatio
+    bool highSequence = f_pivotType(4) == PIVOT_HIGH
+    float upper1 = highSequence ? f_pivotPrice(4) : f_pivotPrice(3)
+    float upper2 = highSequence ? f_pivotPrice(0) : f_pivotPrice(1)
+    float lower1 = highSequence ? f_pivotPrice(3) : f_pivotPrice(4)
+    float lower2 = highSequence ? f_pivotPrice(1) : f_pivotPrice(0)
+    int upperBar1 = highSequence ? f_pivotBar(4) : f_pivotBar(3)
+    int upperBar2 = highSequence ? f_pivotBar(0) : f_pivotBar(1)
+    int lowerBar1 = highSequence ? f_pivotBar(3) : f_pivotBar(4)
+    int lowerBar2 = highSequence ? f_pivotBar(1) : f_pivotBar(0)
+    float upperSlope = f_normalizedSlope(upper1, upper2, upperBar1, upperBar2, poleATRValue)
+    float lowerSlope = f_normalizedSlope(lower1, lower2, lowerBar1, lowerBar2, poleATRValue)
+    float startWidth = f_lineValueAt(upperBar1, upper1, upperBar2, upper2, math.max(upperBar1, lowerBar1)) - f_lineValueAt(lowerBar1, lower1, lowerBar2, lower2, math.max(upperBar1, lowerBar1))
+    float endWidth = f_lineValueAt(upperBar1, upper1, upperBar2, upper2, math.min(upperBar2, lowerBar2)) - f_lineValueAt(lowerBar1, lower1, lowerBar2, lower2, math.min(upperBar2, lowerBar2))
+    bool contracting = endWidth > 0.0 and endWidth < startWidth
+    string signature = str.tostring(poleStartBar) + ":" + str.tostring(consolidationStart) + ":" + str.tostring(consolidationEnd)
+    if fFlag and smallConsolidation and not na(upperSlope) and not na(lowerSlope) and math.abs(upperSlope - lowerSlope) < 0.04
+        bool bullFlag = poleMove > 0.0 and upperSlope <= 0.025 and lowerSlope <= 0.025
+        bool bearFlag = poleMove < 0.0 and upperSlope >= -0.025 and lowerSlope >= -0.025
+        if bullFlag
+            f_offer("Bullish Flag", "BFLAG", consolidationStart, consolidationEnd, TREND_UP, BREAK_UP, MODE_CONTINUATION, upperBar1, upper1, upperBar2, upper2, lowerBar1, lower1, lowerBar2, lower2, INVALID_OPPOSITE_BOUNDARY, na, f_clamp(70.0 + math.min(poleStrength, 5.0) * 5.0), signature)
+        if bearFlag
+            f_offer("Bearish Flag", "SFLAG", consolidationStart, consolidationEnd, TREND_DOWN, BREAK_DOWN, MODE_CONTINUATION, upperBar1, upper1, upperBar2, upper2, lowerBar1, lower1, lowerBar2, lower2, INVALID_OPPOSITE_BOUNDARY, na, f_clamp(70.0 + math.min(poleStrength, 5.0) * 5.0), signature)
+    if fPennant and smallConsolidation and contracting and upperSlope < 0.0 and lowerSlope > 0.0
+        if poleMove > 0.0
+            f_offer("Bullish Pennant", "BPEN", consolidationStart, consolidationEnd, TREND_UP, BREAK_UP, MODE_CONTINUATION, upperBar1, upper1, upperBar2, upper2, lowerBar1, lower1, lowerBar2, lower2, INVALID_OPPOSITE_BOUNDARY, na, f_clamp(72.0 + math.min(poleStrength, 5.0) * 5.0), signature)
+        if poleMove < 0.0
+            f_offer("Bearish Pennant", "SPEN", consolidationStart, consolidationEnd, TREND_DOWN, BREAK_DOWN, MODE_CONTINUATION, upperBar1, upper1, upperBar2, upper2, lowerBar1, lower1, lowerBar2, lower2, INVALID_OPPOSITE_BOUNDARY, na, f_clamp(72.0 + math.min(poleStrength, 5.0) * 5.0), signature)
 
-// Candidate lifecycle: confirmed-bar breakout, failure, expiry, classification. --
-if barstate.isconfirmed and array.size(cName)>0
-    activeCount:=0
-    for i=0 to array.size(cName)-1
-        if array.get(cStatus,i)==0
-            int age=bar_index-array.get(cEnd,i), expected=array.get(cExpected,i)
-            float level=array.get(cLevel,i), inv=array.get(cInvalid,i), pxUp=requireClose?close:high, pxDn=requireClose?close:low
-            // Bilateral candidates use their recent envelope around the stored midlevel.
-            float localHi=ta.highest(high,math.min(math.max(age+1,2),50))[1], localLo=ta.lowest(low,math.min(math.max(age+1,2),50))[1]
-            float upLevel=expected==0?math.max(level,localHi):level, dnLevel=expected==0?math.min(level,localLo):level
-            bool up=pxUp>upLevel+buffer, dn=pxDn<dnLevel-buffer
-            int dir=expected==1 and up?1:expected==-1 and dn?-1:expected==0 and up?1:expected==0 and dn?-1:0
-            bool invalidated=age>maxAge or (not na(inv) and ((expected==1 and low<inv) or (expected==-1 and high>inv)))
-            float bLevel=dir==1?upLevel:dnLevel, bStrength=dir==0?0:math.abs((close-bLevel)/math.max(atr,syminfo.mintick))
-            bool strong=not useBreakStrength or bStrength>=minBreakATR
-            if dir!=0 and strong
-                array.set(cStatus,i,1)
-                string key=array.get(cSig,i)+":"+str.tostring(dir)
-                bool seen=array.includes(emitted,key)
-                if not seen
-                    array.push(emitted,key)
-                    if array.size(emitted)>100
-                        array.shift(emitted)
-                    serial+=1
-                    float quality=f_clamp(array.get(cGeom,i)*.65+math.min(array.get(cTrend,i),100)*.15+math.min(bStrength*100,100)*.20)
-                    string cls=f_class(array.get(cPrior,i),dir,array.get(cName,i)), id=array.get(cCode,i)+"-"+str.tostring(array.get(cStart,i))+"-"+str.tostring(bar_index)
-                    latestName:=array.get(cName,i),latestClass:=cls,latestStatus:="CONFIRMED",latestTrend:=f_trendName(array.get(cPrior,i)),latestID:=id,latestQuality:=quality,latestLevel:=bLevel,latestATR:=atr,latestStrength:=array.get(cTrend,i)
-                    if showConfirmed and (quality>=minQuality or showLow) and showLabels
-                        label lb=label.new(bar_index,dir==1?low:high,array.get(cCode,i)+" #"+str.tostring(serial,"000")+"\n"+str.replace_all(cls,"_"," ")+"\nQ:"+str.tostring(math.round(quality))+" T:"+latestTrend+" "+str.tostring(math.round(latestStrength)),style=dir==1?label.style_label_up:label.style_label_down,color=dir==1?color.new(color.lime,10):color.new(color.red,10),textcolor=color.white,size=size.tiny)
-                        array.push(labels,lb)
+// Diamond: early expansion followed by contraction. Breakout boundaries are the
+// two contracting sides, never the midpoint.
+if structuralPivotChanged and fDiamond and array.size(pivotTypes) >= 7
+    bool startsHigh = f_pivotType(6) == PIVOT_HIGH
+    float earlyHigh = startsHigh ? f_pivotPrice(6) : f_pivotPrice(5)
+    float earlyLow = startsHigh ? f_pivotPrice(5) : f_pivotPrice(6)
+    float middleHigh = startsHigh ? f_pivotPrice(4) : f_pivotPrice(3)
+    float middleLow = startsHigh ? f_pivotPrice(3) : f_pivotPrice(4)
+    float lateHigh = startsHigh ? f_pivotPrice(2) : f_pivotPrice(1)
+    float lateLow = startsHigh ? f_pivotPrice(1) : f_pivotPrice(2)
+    int middleHighBar = startsHigh ? f_pivotBar(4) : f_pivotBar(3)
+    int middleLowBar = startsHigh ? f_pivotBar(3) : f_pivotBar(4)
+    int lateHighBar = startsHigh ? f_pivotBar(2) : f_pivotBar(1)
+    int lateLowBar = startsHigh ? f_pivotBar(1) : f_pivotBar(2)
+    float earlyWidth = earlyHigh - earlyLow
+    float widestWidth = middleHigh - middleLow
+    float lateWidth = lateHigh - lateLow
+    bool diamondGeometry = earlyWidth > 0.0 and widestWidth > earlyWidth and lateWidth > 0.0 and lateWidth < widestWidth and lateHigh < middleHigh and lateLow > middleLow
+    if diamondGeometry
+        int diamondStart = f_pivotBar(6)
+        int diamondEnd = f_pivotBar(0)
+        float diamondATR = f_pivotATR(0)
+        float diamondQuality = f_clamp(65.0 + (widestWidth - earlyWidth) / math.max(earlyWidth, diamondATR) * 15.0 + (widestWidth - lateWidth) / math.max(widestWidth, diamondATR) * 20.0)
+        string diamondSignature = str.tostring(f_pivotBar(6)) + ":" + str.tostring(f_pivotBar(5)) + ":" + str.tostring(f_pivotBar(4)) + ":" + str.tostring(f_pivotBar(3)) + ":" + str.tostring(f_pivotBar(2)) + ":" + str.tostring(f_pivotBar(1)) + ":" + str.tostring(f_pivotBar(0))
+        f_offer("Diamond Top", "DIA-T", diamondStart, diamondEnd, TREND_UP, BREAK_DOWN, MODE_REVERSAL, middleHighBar, middleHigh, lateHighBar, lateHigh, middleLowBar, middleLow, lateLowBar, lateLow, INVALID_OPPOSITE_BOUNDARY, na, diamondQuality, diamondSignature)
+        f_offer("Diamond Bottom", "DIA-B", diamondStart, diamondEnd, TREND_DOWN, BREAK_UP, MODE_REVERSAL, middleHighBar, middleHigh, lateHighBar, lateHigh, middleLowBar, middleLow, lateLowBar, lateLow, INVALID_OPPOSITE_BOUNDARY, na, diamondQuality, diamondSignature)
+        f_offer("Bullish Continuation Diamond", "DIA-CU", diamondStart, diamondEnd, TREND_UP, BREAK_UP, MODE_CONTINUATION, middleHighBar, middleHigh, lateHighBar, lateHigh, middleLowBar, middleLow, lateLowBar, lateLow, INVALID_OPPOSITE_BOUNDARY, na, diamondQuality, diamondSignature)
+        f_offer("Bearish Continuation Diamond", "DIA-CD", diamondStart, diamondEnd, TREND_DOWN, BREAK_DOWN, MODE_CONTINUATION, middleHighBar, middleHigh, lateHighBar, lateHigh, middleLowBar, middleLow, lateLowBar, lateLow, INVALID_OPPOSITE_BOUNDARY, na, diamondQuality, diamondSignature)
+
+// Bump-and-run: bounded chronological regressions compare a lead-in segment to
+// an accelerated bump segment. The projected lead-in reference confirms run.
+if structuralPivotChanged and fBump and array.size(pivotTypes) >= 7
+    int leadStart = f_pivotBar(6)
+    int leadEnd = f_pivotBar(4)
+    int bumpEnd = f_pivotBar(2)
+    int runEnd = f_pivotBar(0)
+    float bumpATR = f_pivotATR(0)
+    float leadSlope = f_segmentSlope(leadStart, leadEnd, bumpATR)
+    float bumpSlope = f_segmentSlope(leadEnd, bumpEnd, bumpATR)
+    float leadStartPrice = f_closeAt(leadStart)
+    float leadEndPrice = f_closeAt(leadEnd)
+    bool historyValid = not na(leadSlope) and not na(bumpSlope) and not na(leadStartPrice) and not na(leadEndPrice)
+    string bumpSignature = str.tostring(leadStart) + ":" + str.tostring(leadEnd) + ":" + str.tostring(bumpEnd) + ":" + str.tostring(runEnd)
+    if historyValid and leadSlope > 0.0 and bumpSlope > leadSlope and math.abs(bumpSlope) >= math.abs(leadSlope) * accelerationMultiplier
+        f_offer("Bump and Run Top", "BRT", leadStart, runEnd, TREND_UP, BREAK_DOWN, MODE_REVERSAL, leadStart, leadStartPrice, leadEnd, leadEndPrice, leadStart, leadStartPrice, leadEnd, leadEndPrice, INVALID_STATIC, f_pivotPrice(2) + f_tolerance(bumpATR), f_clamp(65.0 + math.min(math.abs(bumpSlope / leadSlope), 3.0) * 10.0), bumpSignature)
+    if historyValid and leadSlope < 0.0 and bumpSlope < leadSlope and math.abs(bumpSlope) >= math.abs(leadSlope) * accelerationMultiplier
+        f_offer("Bump and Run Bottom", "BRB", leadStart, runEnd, TREND_DOWN, BREAK_UP, MODE_REVERSAL, leadStart, leadStartPrice, leadEnd, leadEndPrice, leadStart, leadStartPrice, leadEnd, leadEndPrice, INVALID_STATIC, f_pivotPrice(2) - f_tolerance(bumpATR), f_clamp(65.0 + math.min(math.abs(bumpSlope / leadSlope), 3.0) * 10.0), bumpSignature)
+
+// Candidate lifecycle ---------------------------------------------------------
+if barstate.isconfirmed and array.size(candidates) > 0
+    activeCount := 0
+    for index = 0 to array.size(candidates) - 1
+        PatternCandidate candidate = array.get(candidates, index)
+        if candidate.status == STATUS_FORMING
+            int age = bar_index - candidate.knowledgeBar
+            float upperBoundary = f_boundaryUpper(candidate, bar_index)
+            float lowerBoundary = f_boundaryLower(candidate, bar_index)
+            float bullishPrice = requireClose ? close : high
+            float bearishPrice = requireClose ? close : low
+            bool bullishBreak = not na(upperBoundary) and bullishPrice > upperBoundary + breakoutBuffer
+            bool bearishBreak = not na(lowerBoundary) and bearishPrice < lowerBoundary - breakoutBuffer
+            int direction = candidate.expectedBreakout == BREAK_UP and bullishBreak ? BREAK_UP : candidate.expectedBreakout == BREAK_DOWN and bearishBreak ? BREAK_DOWN : candidate.expectedBreakout == BREAK_BILATERAL and bullishBreak ? BREAK_UP : candidate.expectedBreakout == BREAK_BILATERAL and bearishBreak ? BREAK_DOWN : 0
+            bool staticFailure = candidate.invalidMode == INVALID_STATIC and not na(candidate.invalidLevel) and (candidate.expectedBreakout == BREAK_UP ? low < candidate.invalidLevel : candidate.expectedBreakout == BREAK_DOWN ? high > candidate.invalidLevel : false)
+            bool boundaryFailure = candidate.invalidMode == INVALID_OPPOSITE_BOUNDARY and (candidate.expectedBreakout == BREAK_UP ? bearishBreak : candidate.expectedBreakout == BREAK_DOWN ? bullishBreak : false)
+            bool invalidated = age > maxAge or staticFailure or boundaryFailure
+            float breakoutLevel = direction == BREAK_UP ? upperBoundary : direction == BREAK_DOWN ? lowerBoundary : na
+            float breakoutStrength = direction == 0 or na(breakoutLevel) ? 0.0 : math.abs(close - breakoutLevel) / math.max(atr, syminfo.mintick)
+            bool strengthAccepted = not useBreakStrength or breakoutStrength >= minBreakATR
+            if direction != 0 and strengthAccepted
+                candidate.status := STATUS_CONFIRMED
+                f_deleteForming(candidate)
+                string deterministicID = candidate.code + "-" + str.tostring(candidate.startBar) + "-" + str.tostring(bar_index)
+                if not array.includes(emittedIDs, deterministicID)
+                    array.push(emittedIDs, deterministicID)
+                    while array.size(emittedIDs) > 100
+                        array.shift(emittedIDs)
+                    serial += 1
+                    float quality = f_clamp(candidate.geometryScore * 0.65 + candidate.priorStrength * 0.15 + math.min(breakoutStrength * 100.0, 100.0) * 0.20)
+                    string classification = f_classification(candidate, direction)
+                    latestName := candidate.name
+                    latestClass := classification
+                    latestStatus := "CONFIRMED"
+                    latestTrend := f_trendName(candidate.priorTrend)
+                    latestID := deterministicID
+                    latestQuality := quality
+                    latestLevel := breakoutLevel
+                    latestATR := atr
+                    latestStrength := candidate.priorStrength
+                    if showConfirmed and (quality >= minQuality or showLow) and showLabels
+                        label confirmedLabel = label.new(bar_index, direction == BREAK_UP ? low : high, candidate.code + " #" + str.tostring(serial) + "\n" + str.replace_all(classification, "_", " ") + "\nQ:" + str.tostring(math.round(quality)) + " T:" + latestTrend + " " + str.tostring(math.round(latestStrength)), style = direction == BREAK_UP ? label.style_label_up : label.style_label_down, color = direction == BREAK_UP ? color.new(color.lime, 10) : color.new(color.red, 10), textcolor = color.white, size = size.tiny)
+                        f_manageLabel(confirmedLabel)
                     if showLines
-                        int so=bar_index-array.get(cStart,i), eo=bar_index-array.get(cEnd,i)
-                        if so>=0 and so<=999 and eo>=0 and eo<=999
-                            line shapeLine=line.new(array.get(cStart,i),close[so],array.get(cEnd,i),close[eo],color=color.new(dir==1?color.lime:color.red,35))
-                            array.push(lines,shapeLine)
-                    bool neckPattern=str.contains(array.get(cName,i),"Top") or str.contains(array.get(cName,i),"Bottom") or str.contains(array.get(cName,i),"Shoulders")
-                    if showNeck and neckPattern
-                        line neckLine=line.new(array.get(cEnd,i),bLevel,bar_index,bLevel,color=color.new(color.yellow,20))
-                        array.push(lines,neckLine)
+                        if not na(candidate.upperPrice1) and not na(candidate.upperPrice2)
+                            f_manageLine(line.new(candidate.upperBar1, candidate.upperPrice1, bar_index, upperBoundary, color = color.new(color.red, 30)))
+                        if not na(candidate.lowerPrice1) and not na(candidate.lowerPrice2)
+                            f_manageLine(line.new(candidate.lowerBar1, candidate.lowerPrice1, bar_index, lowerBoundary, color = color.new(color.lime, 30)))
+                    if showNeck and (candidate.code == "HNS" or candidate.code == "IHNS" or candidate.code == "DT" or candidate.code == "DB" or candidate.code == "TT" or candidate.code == "TB")
+                        f_manageLine(line.new(candidate.endBar, breakoutLevel, bar_index, breakoutLevel, color = color.new(color.yellow, 20)))
                     if showBreak
-                        line ln=line.new(array.get(cEnd,i),bLevel,bar_index,bLevel,color=dir==1?color.lime:color.red,style=line.style_dashed)
-                        array.push(lines,ln)
+                        f_manageLine(line.new(candidate.endBar, breakoutLevel, bar_index, breakoutLevel, color = direction == BREAK_UP ? color.lime : color.red, style = line.style_dashed))
             else if invalidated
-                array.set(cStatus,i,2)
+                candidate.status := STATUS_FAILED
+                f_deleteForming(candidate)
                 if debugMode
-                    label.new(bar_index,close,array.get(cCode,i)+" FAILED\n"+(age>maxAge?"expired":"invalidated"),color=color.new(color.red,55),textcolor=color.white,size=size.tiny)
+                    label failedLabel = label.new(bar_index, close, candidate.code + " FAILED\n" + (age > maxAge ? "expired" : "invalidated"), color = color.new(color.red, 55), textcolor = color.white, size = size.tiny)
+                    f_manageLabel(failedLabel)
             else
-                activeCount+=1
-while array.size(labels)>120
-    label.delete(array.shift(labels))
-while array.size(lines)>100
-    line.delete(array.shift(lines))
+                activeCount += 1
 
 // Dashboard -------------------------------------------------------------------
-var table dash=table.new(position.top_right,2,10,border_width=1)
+var table dashboard = table.new(position.top_right, 2, 10, border_width = 1)
 if barstate.islast and showDash
-    table.cell(dash,0,0,"LATEST PATTERN",bgcolor=color.rgb(35,45,60),text_color=color.white),table.cell(dash,1,0,"",bgcolor=color.rgb(35,45,60))
-    table.cell(dash,0,1,"Pattern"),table.cell(dash,1,1,latestName)
-    table.cell(dash,0,2,"Class"),table.cell(dash,1,2,str.replace_all(latestClass,"_"," "))
-    table.cell(dash,0,3,"Status"),table.cell(dash,1,3,latestStatus)
-    table.cell(dash,0,4,"Prior Trend"),table.cell(dash,1,4,latestTrend)
-    table.cell(dash,0,5,"Trend Strength"),table.cell(dash,1,5,na(latestStrength)?"—":str.tostring(math.round(latestStrength)))
-    table.cell(dash,0,6,"Quality"),table.cell(dash,1,6,na(latestQuality)?"—":str.tostring(math.round(latestQuality)))
-    table.cell(dash,0,7,"Breakout / ATR"),table.cell(dash,1,7,na(latestLevel)?"—":str.tostring(latestLevel,format.mintick)+" / "+str.tostring(latestATR,format.mintick))
-    table.cell(dash,0,8,"ID"),table.cell(dash,1,8,latestID)
-    table.cell(dash,0,9,"Active forming"),table.cell(dash,1,9,str.tostring(activeCount))
+    table.cell(dashboard, 0, 0, "LATEST PATTERN", bgcolor = color.rgb(35, 45, 60), text_color = color.white)
+    table.cell(dashboard, 1, 0, "", bgcolor = color.rgb(35, 45, 60))
+    table.cell(dashboard, 0, 1, "Pattern")
+    table.cell(dashboard, 1, 1, latestName)
+    table.cell(dashboard, 0, 2, "Class")
+    table.cell(dashboard, 1, 2, str.replace_all(latestClass, "_", " "))
+    table.cell(dashboard, 0, 3, "Status")
+    table.cell(dashboard, 1, 3, latestStatus)
+    table.cell(dashboard, 0, 4, "Prior Trend")
+    table.cell(dashboard, 1, 4, latestTrend)
+    table.cell(dashboard, 0, 5, "Trend Strength")
+    table.cell(dashboard, 1, 5, na(latestStrength) ? "—" : str.tostring(math.round(latestStrength)))
+    table.cell(dashboard, 0, 6, "Quality")
+    table.cell(dashboard, 1, 6, na(latestQuality) ? "—" : str.tostring(math.round(latestQuality)))
+    table.cell(dashboard, 0, 7, "Breakout / ATR")
+    table.cell(dashboard, 1, 7, na(latestLevel) ? "—" : str.tostring(latestLevel, format.mintick) + " / " + str.tostring(latestATR, format.mintick))
+    table.cell(dashboard, 0, 8, "ID")
+    table.cell(dashboard, 1, 8, latestID)
+    table.cell(dashboard, 0, 9, "Active forming")
+    table.cell(dashboard, 1, 9, str.tostring(activeCount))
 
-alertcondition(latestStatus=="CONFIRMED" and latestID!=latestID[1],"New confirmed pattern","A new FCPO Core Chart Pattern has confirmed.")
+bool newConfirmedPattern = latestStatus == "CONFIRMED" and latestID != latestID[1]
+alertcondition(newConfirmedPattern, "New confirmed pattern", "A new FCPO Core Chart Pattern has confirmed.")

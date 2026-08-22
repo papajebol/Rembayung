@@ -10,20 +10,27 @@ does not claim or imply profitability.
 `fcpo_25_core_patterns_v1.pine` follows a bounded event pipeline:
 
 1. ATR and tick-size normalization.
-2. Confirmed `ta.pivothigh` / `ta.pivotlow` events stored in capped arrays.
+2. Confirmed `ta.pivothigh` / `ta.pivotlow` events normalized into a capped,
+   strictly alternating swing array. A same-type pivot replaces the previous
+   swing only when it is more extreme. Simultaneous high/low pivots are resolved
+   by the larger ATR-normalized excursion from the last structural pivot.
 3. A per-bar, precomputed trend model combining pre-pattern market structure,
    normalized regression slope, and EMA alignment/slope.
 4. Geometry detectors evaluated only when a new pivot is confirmed.
 5. Pattern-specific geometry scoring and a shared trend/quality gate.
-6. Active candidates updated on confirmed bars for close/wick breakout or
-   invalidation.
+6. Typed candidate objects store both upper and lower boundary anchors. Active
+   candidates project those exact boundaries on each confirmed bar for
+   close/wick breakout or geometry-aware invalidation.
 7. Contextual reversal/continuation classification after breakout.
-8. Signature/overlap-based same-type duplicate suppression.
+8. Signature, overlap, start proximity, and boundary-similarity based same-type
+   duplicate suppression. A superior duplicate replaces the complete object.
 9. Bounded labels, lines, debug labels, and a latest-pattern dashboard.
 
 Trend history is read at `patternStartBar - 1`, never at the breakout bar.
 Because a pivot becomes available only after its right bars have elapsed, the
-script never backdates a label to a point where the pattern was unknowable.
+script never backdates a state label to a point where the pattern was
+unknowable. Forming labels are placed on the knowledge bar and deleted when the
+candidate confirms or fails. Geometry lines may still connect historical pivots.
 
 ## Implemented core families
 
@@ -72,50 +79,81 @@ them as one core family.
 | Up/down trend score threshold | +3 / -3 |
 | Minimum trend strength | 55 |
 | Minimum pole | 2.0 ATR |
+| Bump acceleration multiplier | 1.8 |
 | Minimum curve R² | 0.60 |
+| Minimum V temporal symmetry | 0.55 |
 | Minimum pattern quality | 60 |
 | Candidate maximum age | 180 bars |
 
 ## Deliberate V1 approximations and limitations
 
 * Pivot geometry is a deterministic abstraction of hand-drawn patterns. Complex
-  families use recent alternating extrema and normalized boundary regression,
-  so visual judgment can differ from the detector.
+  families use recent alternating extrema and normalized boundary lines, so
+  visual judgment can differ from the detector.
 * Rounding and cup bodies use quadratic least-squares curvature and R² over the
   pattern interval. Handles are measured from confirmed pivots in the upper (or
   lower) portion; V-like cups are rejected unless explicitly enabled.
-* Diamond detection splits the pivot sequence at its midpoint and compares range
-  expansion then contraction. Top/bottom versus continuation is resolved from
-  stored prior trend and confirmed breakout direction.
-* Bump-and-run uses an ATR-normalized lead-in slope followed by an accelerated
-  excursion and trendline break; it does not attempt log-chart trendlines.
+* Diamond detection compares an early width, maximum width, and contracted late
+  width. Breakouts use projected upper/lower contracting sides. Reversal and
+  continuation subtypes are explicitly gated by prior trend and direction.
+* Bump-and-run uses chronological least-squares regressions over bounded lead-in
+  and bump segments. The bump must accelerate by the configured multiplier and
+  the run must cross the projected lead-in reference. It does not attempt
+  log-chart trendlines.
 * V patterns require opposite normalized legs and a strong prior trend. Their
   minimum leg length and symmetry are pivot-based rather than tick-path based.
 * Flags require approximately parallel countertrend boundaries; pennants require
-  convergence. Both require an ATR-normalized pole and a consolidation no larger
-  than a configurable fraction of that pole.
+  convergence. Both require an ATR-normalized pole ending exactly where the
+  consolidation starts. Consolidation range ends at the final pattern pivot,
+  excluding the right-side pivot-confirmation bars.
+* Cup variants require ATR-similar rims, quadratic fit, meaningful depth, and a
+  shallow handle in the upper/lower region. With `Allow V-like cups` disabled,
+  the fit must also meet the stricter 0.70 R² floor.
 * `FAILED` candidates are retained internally for deterministic state transition
   and debug output, but the normal chart emphasizes forming/confirmed patterns.
 * TradingView drawing limits require bounded output; older labels and lines are
   deleted. The script does not scan all historical pivot combinations.
 
-## TradingView Bar Replay test procedure
+## Static checks
 
-1. Open Pine Editor, paste `fcpo_25_core_patterns_v1.pine`, save, and add it to
-   an FCPO 5-minute chart.
-2. Keep `Require breakout close` enabled and begin Bar Replay well before a
-   recognizable structure.
-3. Advance one candle at a time. Confirm no pivot/candidate appears until the
-   configured right-pivot bars have closed.
-4. Turn on forming patterns and debug mode. Verify the displayed prior trend is
-   the state immediately before the first pivot, and inspect tolerance, slopes,
-   geometry score, and rejection reason.
-5. Cross the boundary by wick only, then by close. With the default setting only
-   the close should confirm.
-6. Replay the same interval twice and verify identical IDs, breakout bars, and
-   no repeated same-signature labels.
-7. Test sideways, trending, and high-volatility sessions; tune pivot length and
-   ATR multipliers rather than adding price-level or percentage constants.
-8. Review geometry first, then prior trend, classification, breakout accuracy,
-   duplicate frequency, and false positives. Do not interpret detections as
-   entries, exits, or evidence of profitability.
+Run:
+
+```bash
+python3 tests/test_pine_static.py
+git diff --check
+```
+
+The repository test checks known source-level invariants, including Pine v6
+indicator mode, all 25 family identifiers, explicit `na` typing, alternating
+pivot replacement, dynamic boundaries, honest forming-label placement, and
+single-object candidate storage. **It is not a Pine compiler and does not
+substitute for compiling in TradingView Pine Editor.**
+
+## TradingView compiler and Bar Replay validation
+
+1. Paste `fcpo_25_core_patterns_v1.pine` into TradingView Pine Editor.
+2. Confirm that Pine Editor reports zero compiler errors before testing signals.
+3. Add the indicator to an FCPO 5-minute chart.
+4. Enable one pattern family at a time to isolate its geometry.
+5. Start Bar Replay well before a recognizable structure and advance one candle
+   at a time.
+6. Inspect pivot chronology: types must alternate and no pivot may be known until
+   its configured right-side bars close.
+7. Inspect the stored prior trend immediately before the first pattern pivot.
+8. Inspect the ATR/tick tolerance shown by debug mode across quiet and volatile
+   sessions.
+9. Visually extend the detected upper/lower boundary and compare it with the
+   script's projected breakout line.
+10. With `Require breakout close` enabled, confirm a wick crossing does not
+    confirm and an actual close beyond the projected boundary plus buffer does.
+11. Confirm a FORMING label appears on its knowledge bar, never on the earlier
+    final-pivot bar.
+12. Confirm CONFIRMED or FAILED resolution removes the orange forming state.
+13. Replay the same interval twice and verify identical IDs and no repeated
+    same-structure labels.
+14. Record false positives separately for each family, then tune pivot and ATR
+    settings rather than adding fixed price or percentage constants.
+
+Review geometry first, followed by prior trend, classification, breakout
+accuracy, duplicate frequency, and false positives. Do not interpret detections
+as entries, exits, or evidence of profitability.
