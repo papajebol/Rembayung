@@ -87,7 +87,8 @@ them as one core family.
 | Bump acceleration multiplier | 1.8 |
 | Minimum curve R² | 0.60 |
 | Minimum V temporal symmetry | 0.55 |
-| Minimum pattern quality | 60 |
+| Minimum geometry score | 55 |
+| Minimum final output quality | 60 |
 | Candidate maximum age | 180 bars |
 | Wedge bars / start width / contraction | 8 / 1.0 ATR / 0.20 |
 | Maximum wedge apex distance | 3× pattern duration |
@@ -96,7 +97,11 @@ them as one core family.
 | Double/triple minimum depth | 0.75 ATR |
 | Minimum V leg | 1.0 ATR |
 | Minimum rounding height/depth | 1.0 ATR |
+| Minimum rounding center-edge dominance | 0.25 ATR |
+| Pennant contraction / start width | 0.20 / 0.75 ATR |
+| Minimum flag range | 0.50 ATR |
 | Drawing Mode / Last N | Latest Only / 5 |
+| Invalidation Mode | Wick |
 
 ## Deliberate V1 approximations and limitations
 
@@ -105,7 +110,8 @@ them as one core family.
   visual judgment can differ from the detector.
 * Rounding and cup bodies use quadratic least-squares curvature and R² over the
   pattern interval. Handles are measured from confirmed pivots in the upper (or
-  lower) portion; V-like cups are rejected unless explicitly enabled.
+  lower) portion. `Relax Cup Curve Fit` lowers the R² floor; it does not claim to
+  implement a separate V-cup morphology.
 * Diamond detection compares an early width, maximum width, and contracted late
   width. Breakouts use projected upper/lower contracting sides. Reversal and
   continuation subtypes are explicitly gated by prior trend and direction.
@@ -122,14 +128,16 @@ them as one core family.
 * Cup variants require ATR-similar rims, quadratic fit, meaningful depth, and a
   shallow handle in the upper/lower region. The left rim and right rim are the
   first and third pivots; the fourth confirmed pivot completes the handle, so a
-  candidate does not wait for a breakout-high pivot. With `Allow V-like cups`
+  candidate does not wait for a breakout-high pivot. With `Relax Cup Curve Fit`
   disabled, the fit must also meet the stricter 0.70 R² floor.
 * Wedges must meet minimum duration, ATR-normalized starting width, contraction,
   mirrored slope inequalities, and a stable future apex no farther than the
   configured duration multiple. Wedges also require a persistent, non-sideways
   prior trend.
 * Rounding structures require a central quadratic vertex, opposite left/right
-  segment slopes, minimum R², and meaningful ATR-normalized height/depth.
+  segment slopes, minimum R², meaningful ATR-normalized height/depth, and a
+  dominant center relative to both outer quarters. Their invalidation uses the
+  actual sampled window extreme.
 * `FAILED` candidates are retained internally for deterministic state transition
   and debug output, but the normal chart emphasizes forming/confirmed patterns.
 * TradingView drawing limits require bounded output; older labels and lines are
@@ -137,7 +145,8 @@ them as one core family.
 
 ## Heuristic scores and display clustering
 
-`Quality` is a **comparative heuristic**, not statistical confidence. Geometry
+`Quality` is a **comparative heuristic**, not statistical confidence or a
+probability percentage. Geometry
 starts at zero and earns pattern-specific points from valid proportions such as
 duration, width, contraction, symmetry, curvature, pole strength, or boundary
 accuracy. A confirmed result combines:
@@ -153,11 +162,28 @@ strength and persistence gates. Strong trend cannot make structurally invalid
 geometry valid, and `Show low-quality patterns` bypasses only the numeric quality
 threshold.
 
-Confirmed display clustering suppresses only same-code, same-direction patterns
+Candidate admission and visible output have separate gates. A candidate must
+earn the configured `Minimum geometry score` before entering the lifecycle.
+After breakout it must independently earn `Minimum final output quality`. A
+structurally confirmed result below the final gate remains available to debug
+mode but cannot update the normal dashboard, draw, label, increment the normal
+serial/event counter, or fire the normal alert.
+
+Confirmed display clustering uses **first-confirmed-wins** and suppresses only
+same-code, same-direction patterns
 with matching prior context, substantial time overlap, nearby breakout bars, and
-similar projected boundaries. Different families remain independently visible.
+similar projected boundaries. Its tolerance is frozen from candidate/breakout
+volatility. A later higher-scoring variant cannot delete or replace the original
+live-confirmed event, and cannot produce a second normal alert. Different
+families remain independently visible.
 Drawing ownership allows obsolete pattern lines to be removed without deleting
 the detector's raw candidate lifecycle.
+
+Breakout confirmation and structural invalidation are independent controls.
+Breakout defaults to confirmed close; invalidation defaults to wick and can be
+changed to close. If breakout and structural invalidation occur on the same bar,
+invalidation deterministically wins and no normal confirmation is emitted.
+`All (max 50)` accurately describes the bounded full-history drawing option.
 
 ## Static checks
 
@@ -222,6 +248,24 @@ Only after geometry, context, boundary, timing, and clustering are manually
 accepted should pattern occurrence/outcome statistics be collected. Do **not**
 collect profitability statistics or treat detections as trade entries at this
 stage.
+
+## Round 3 regression scenarios
+
+1. **Valid Double Bottom:** exactly one normal confirmation.
+2. **Later higher-Q DB in the same cluster:** preserve the first historical
+   label/event, suppress the later variant, and do not alert twice.
+3. **Geometry 60, final quality 45, final minimum 60:** internal confirmation is
+   debug-only; no latest/dashboard update, normal label, drawing, serial, or alert.
+4. **DB invalidation wick and neckline close on one candle:** structural failure
+   wins and no confirmation is emitted.
+5. **Pennant contraction 5%:** reject against the default 20% minimum.
+6. **Flag range 0.2 ATR:** reject against the default 0.5 ATR minimum.
+7. **High-R² Rounding Top without center dominance:** reject morphology.
+8. **Falling Wedge plus Double Bottom:** both may emit because codes differ.
+9. **Two accepted families on one bar:** increment the event counter for both;
+   dashboard chooses final quality, then geometry, breakout, and code order.
+10. **Latest Only:** retain historical confirmed labels, but show geometry
+    drawings only for the latest/highest-quality same-bar representative.
 
 Review geometry first, followed by prior trend, classification, breakout
 accuracy, duplicate frequency, and false positives. Do not interpret detections

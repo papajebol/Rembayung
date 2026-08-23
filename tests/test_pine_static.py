@@ -76,4 +76,42 @@ assert "trendPersistence" in text and "priorPersistence >= minPriorTrendBars" in
 assert "candidate.geometryScore * 0.50" in text
 assert not re.search(r"f_clamp\((?:6[5-9]|7\d|8\d)(?:\.0)?\s*\+", text)
 
+# Round 3 lifecycle, final-quality, frozen-tolerance, and morphology guards.
+assert 'minGeometryScore = input.int(55' in text
+assert 'minFinalQuality = input.int(60' in text
+assert "geometryScore >= minGeometryScore or showLow" in text
+assert "finalQualityAccepted = quality >= minFinalQuality or showLow" in text
+assert "if not finalQualityAccepted" in text
+assert "STATUS_CONFIRMED_INTERNAL" in text
+assert "STATUS_CONFIRMED_SUPPRESSED" in text
+assert "STATUS_CONFIRMED_EMITTED" in text
+assert "first-confirmed-wins" in text
+assert "confirmed cluster already emitted" in text
+assert "array.remove(displayedPatterns" not in text
+assert "label.delete(clustered" not in text
+assert "confirmedEventCounter += 1" in text
+assert "confirmedEventCounter > confirmedEventCounter[1]" in text
+assert "dashboardWinner" in text and "bestQualityThisBar" in text
+assert "if invalidated or expired" in text
+assert text.index("if invalidated or expired") < text.index("else if direction != 0 and strengthAccepted")
+assert 'input.string("Wick", "Invalidation Mode"' in text
+assert "same-bar structural invalidation" in text
+assert "windowHigh + f_tolerance(patternATR)" in text
+assert "windowLow - f_tolerance(patternATR)" in text
+assert "minRoundingCenterEdgeATR" in text and "topCenterDominant" in text
+assert "slopeConsistencyPoints" in text
+assert "minPennantContractionRatio" in text
+assert "minPennantStartWidthATR" in text
+assert "minFlagRangeATR" in text
+assert '"All (max 50)"' in text
+assert "touchStructurePoints" in text
+assert "Relax Cup Curve Fit" in text and "allowVCup" not in text
+assert "toleranceAtCreation" in text
+assert "toleranceAtBreakout" in text
+assert "duplicateTolerance" in text and "clusterTolerance" in text
+assert "priorStructureComponent" in text
+assert "priorSlopeComponent" in text
+assert "priorEMAComponent" in text
+assert "priorPersistenceComponent" in text
+
 print("PASS: repository Pine invariants (not a TradingView compiler test)")
