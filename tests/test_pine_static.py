@@ -48,11 +48,32 @@ assert "PatternCandidate removed = array.shift(candidates)" in text
 # Explicitly guard the repaired geometry and context defects.
 assert "upperSlope < lowerSlope and lowerSlope < 0.0" in text
 assert "lowerSlope > upperSlope and upperSlope > 0.0" in text
-assert '"Cup and Handle", "CUP", patternStart, patternEnd, TREND_UP' in text
-assert '"Inverted Cup and Handle", "ICUP", patternStart, patternEnd, TREND_DOWN' in text
+assert '"Cup and Handle", "CUP", leftRimBar, handleBar, TREND_UP' in text
+assert '"Inverted Cup and Handle", "ICUP", leftRimBar, handleBar, TREND_DOWN' in text
+assert "f_equalLevel(leftRim, rightRim, cupATR)" in text
 assert "f_normalizedSlope(b, c, barB, barC" in text
 assert "f_normalizedSlope(c, d, barC, barD" in text
 assert "float poleMove = poleEndPrice - poleStartPrice" in text
 assert "f_windowRange(consolidationStart, consolidationEnd)" in text
+
+# Selectivity added after initial TradingView validation.
+assert "minWedgeContractionRatio" in text and "contractionRatio >= minWedgeContractionRatio" in text
+assert "minWedgeBars" in text and "patternBars >= minWedgeBars" in text
+assert "maxApexDistanceMultiple" in text and "apexValid" in text
+assert "vertexMinFraction" in text and "vertexMaxFraction" in text
+assert "leftCurveSlope > 0.0 and rightCurveSlope < 0.0" in text
+assert "leftCurveSlope < 0.0 and rightCurveSlope > 0.0" in text
+assert "minRoundingHeightATR" in text
+assert "projectedFinalBoundary" in text and "finalPivotValid" in text
+assert "f_clusterMatch(" in text and "displayClusterOverlap" in text
+assert 'input.string("Latest Only", "Drawing Mode"' in text
+assert 'drawingMode == "Latest Only"' in text
+assert "neckBar1" in text and "neckAtBreakout" in text
+assert "ambiguousBreakout" in text and "ambiguousBreakout ? 0" in text
+assert "minDoubleDepthATR" in text and "doubleDepthATR >= minDoubleDepthATR" in text
+assert "minVLegATR" in text and "leftAmplitudeATR >= minVLegATR" in text
+assert "trendPersistence" in text and "priorPersistence >= minPriorTrendBars" in text
+assert "candidate.geometryScore * 0.50" in text
+assert not re.search(r"f_clamp\((?:6[5-9]|7\d|8\d)(?:\.0)?\s*\+", text)
 
 print("PASS: repository Pine invariants (not a TradingView compiler test)")

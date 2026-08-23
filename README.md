@@ -24,7 +24,11 @@ does not claim or imply profitability.
 7. Contextual reversal/continuation classification after breakout.
 8. Signature, overlap, start proximity, and boundary-similarity based same-type
    duplicate suppression. A superior duplicate replaces the complete object.
-9. Bounded labels, lines, debug labels, and a latest-pattern dashboard.
+9. Confirmed same-family candidates pass through a second display cluster using
+   direction, prior context, overlap, breakout proximity, and boundaries. Raw
+   candidate state remains available for debugging.
+10. Owned, bounded drawings follow `Latest Only`, `Last N`, or `All` mode, with
+   `Latest Only` as the default, plus managed labels and a compact dashboard.
 
 Trend history is read at `patternStartBar - 1`, never at the breakout bar.
 Because a pivot becomes available only after its right bars have elapsed, the
@@ -78,12 +82,21 @@ them as one core family.
 | Normalized trend slope threshold | 0.035 ATR/bar |
 | Up/down trend score threshold | +3 / -3 |
 | Minimum trend strength | 55 |
+| Minimum prior-trend persistence | 10 bars |
 | Minimum pole | 2.0 ATR |
 | Bump acceleration multiplier | 1.8 |
 | Minimum curve R² | 0.60 |
 | Minimum V temporal symmetry | 0.55 |
 | Minimum pattern quality | 60 |
 | Candidate maximum age | 180 bars |
+| Wedge bars / start width / contraction | 8 / 1.0 ATR / 0.20 |
+| Maximum wedge apex distance | 3× pattern duration |
+| Triangle bars / start width / contraction | 8 / 1.0 ATR / 0.20 |
+| Rectangle bars / height | 8 / 0.75 ATR |
+| Double/triple minimum depth | 0.75 ATR |
+| Minimum V leg | 1.0 ATR |
+| Minimum rounding height/depth | 1.0 ATR |
+| Drawing Mode / Last N | Latest Only / 5 |
 
 ## Deliberate V1 approximations and limitations
 
@@ -107,12 +120,44 @@ them as one core family.
   consolidation starts. Consolidation range ends at the final pattern pivot,
   excluding the right-side pivot-confirmation bars.
 * Cup variants require ATR-similar rims, quadratic fit, meaningful depth, and a
-  shallow handle in the upper/lower region. With `Allow V-like cups` disabled,
-  the fit must also meet the stricter 0.70 R² floor.
+  shallow handle in the upper/lower region. The left rim and right rim are the
+  first and third pivots; the fourth confirmed pivot completes the handle, so a
+  candidate does not wait for a breakout-high pivot. With `Allow V-like cups`
+  disabled, the fit must also meet the stricter 0.70 R² floor.
+* Wedges must meet minimum duration, ATR-normalized starting width, contraction,
+  mirrored slope inequalities, and a stable future apex no farther than the
+  configured duration multiple. Wedges also require a persistent, non-sideways
+  prior trend.
+* Rounding structures require a central quadratic vertex, opposite left/right
+  segment slopes, minimum R², and meaningful ATR-normalized height/depth.
 * `FAILED` candidates are retained internally for deterministic state transition
   and debug output, but the normal chart emphasizes forming/confirmed patterns.
 * TradingView drawing limits require bounded output; older labels and lines are
   deleted. The script does not scan all historical pivot combinations.
+
+## Heuristic scores and display clustering
+
+`Quality` is a **comparative heuristic**, not statistical confidence. Geometry
+starts at zero and earns pattern-specific points from valid proportions such as
+duration, width, contraction, symmetry, curvature, pole strength, or boundary
+accuracy. A confirmed result combines:
+
+* Geometry: 50%
+* Prior context: 20%
+* ATR-normalized breakout strength: 30%
+
+Trend strength also starts at zero: market structure contributes 35 points,
+normalized slope 25, EMA direction/slope alignment 15, and persistent trend
+duration 25. Reversal and continuation candidates must meet both configured
+strength and persistence gates. Strong trend cannot make structurally invalid
+geometry valid, and `Show low-quality patterns` bypasses only the numeric quality
+threshold.
+
+Confirmed display clustering suppresses only same-code, same-direction patterns
+with matching prior context, substantial time overlap, nearby breakout bars, and
+similar projected boundaries. Different families remain independently visible.
+Drawing ownership allows obsolete pattern lines to be removed without deleting
+the detector's raw candidate lifecycle.
 
 ## Static checks
 
@@ -131,28 +176,52 @@ substitute for compiling in TradingView Pine Editor.**
 
 ## TradingView compiler and Bar Replay validation
 
-1. Paste `fcpo_25_core_patterns_v1.pine` into TradingView Pine Editor.
-2. Confirm that Pine Editor reports zero compiler errors before testing signals.
-3. Add the indicator to an FCPO 5-minute chart.
-4. Enable one pattern family at a time to isolate its geometry.
-5. Start Bar Replay well before a recognizable structure and advance one candle
-   at a time.
-6. Inspect pivot chronology: types must alternate and no pivot may be known until
-   its configured right-side bars close.
-7. Inspect the stored prior trend immediately before the first pattern pivot.
-8. Inspect the ATR/tick tolerance shown by debug mode across quiet and volatile
-   sessions.
-9. Visually extend the detected upper/lower boundary and compare it with the
-   script's projected breakout line.
-10. With `Require breakout close` enabled, confirm a wick crossing does not
-    confirm and an actual close beyond the projected boundary plus buffer does.
-11. Confirm a FORMING label appears on its knowledge bar, never on the earlier
-    final-pivot bar.
-12. Confirm CONFIRMED or FAILED resolution removes the orange forming state.
-13. Replay the same interval twice and verify identical IDs and no repeated
-    same-structure labels.
-14. Record false positives separately for each family, then tune pivot and ATR
-    settings rather than adding fixed price or percentage constants.
+### Phase 1 — Compile
+
+Paste `fcpo_25_core_patterns_v1.pine` into Pine Editor and require zero compiler
+errors before evaluating any detection.
+
+### Phase 2 — Isolate families
+
+Add the indicator to FCPO M5 and enable one pattern family at a time. Keep the
+initial defaults until that family's geometry has been inspected.
+
+### Phase 3 — Bar Replay
+
+Begin before a recognizable structure and advance one bar at a time. Pivots must
+alternate, appear only after right-side confirmation, and FORMING labels must
+appear on the knowledge bar rather than the historical pivot.
+
+### Phase 4 — Verify geometry
+
+Check ATR width/depth, touch count, duration, slopes, contraction/expansion,
+rounding vertex, wedge apex, pole segmentation, and pattern-specific proportions.
+Use debug output to record the principal rejection reason and earned scores.
+
+### Phase 5 — Verify prior trend
+
+Confirm that trend state, strength, and persistence come from immediately before
+the first pattern pivot. A weak sideways context must not become a wedge reversal
+or continuation.
+
+### Phase 6 — Verify breakout boundary
+
+Compare the projected pattern boundary with price. With close confirmation on, a
+wick is insufficient. With it off, a candle piercing both bilateral boundaries
+must remain unconfirmed until an unambiguous later breakout.
+
+### Phase 7 — Verify duplicate/display suppression
+
+Replay the interval twice, check deterministic IDs, and verify same-family
+structural variants cluster while different valid families coexist. Test all
+three drawing modes; `Latest Only` must remove the prior pattern's owned lines.
+
+### Phase 8 — Statistics only after correctness
+
+Only after geometry, context, boundary, timing, and clustering are manually
+accepted should pattern occurrence/outcome statistics be collected. Do **not**
+collect profitability statistics or treat detections as trade entries at this
+stage.
 
 Review geometry first, followed by prior trend, classification, breakout
 accuracy, duplicate frequency, and false positives. Do not interpret detections
