@@ -100,6 +100,11 @@ them as one core family.
 | Minimum rounding center-edge dominance | 0.25 ATR |
 | Pennant contraction / start width | 0.20 / 0.75 ATR |
 | Minimum flag range | 0.50 ATR |
+| Double separation | 4–60 bars |
+| Triple same-side leg / maximum span | 3 / 90 bars |
+| Maximum flag width change | 0.35 |
+| Diamond bars / maximum width | 10 / 1.25 ATR |
+| Cup handle bars / maximum duration ratio | 3 / 0.50 |
 | Drawing Mode / Last N | Latest Only / 5 |
 | Invalidation Mode | Wick |
 
@@ -185,6 +190,19 @@ changed to close. If breakout and structural invalidation occur on the same bar,
 invalidation deterministically wins and no normal confirmation is emitted.
 `All (max 50)` accurately describes the bounded full-history drawing option.
 
+Candidate creation audits every completed bar from the final pattern pivot
+through the current knowledge bar. A static or projected opposite-boundary break
+during that pivot-confirmation gap rejects the candidate before FORMING state.
+A breakout in the gap is never backdated: confirmation can occur only on the
+knowledge bar or later, and only while the current bar still satisfies breakout.
+Unavailable gap history rejects safely rather than substituting a zero price.
+
+Converging wedges, triangles, and pennants expire once their projected upper
+boundary reaches or crosses their lower boundary. Apex expiry is resolved before
+breakout, so a mathematically ended formation cannot confirm later. Candidate
+deduplication considers only currently FORMING candidates; resolved entries are
+preferentially removed when capacity is needed.
+
 ## Static checks
 
 Run:
@@ -266,6 +284,30 @@ stage.
    dashboard chooses final quality, then geometry, breakout, and code order.
 10. **Latest Only:** retain historical confirmed labels, but show geometry
     drawings only for the latest/highest-quality same-bar representative.
+
+## Round 4 regression scenarios
+
+1. **Confirmation-gap DB invalidation:** break below DB invalidation before the
+   second pivot becomes knowable, then recover; no candidate may enter FORMING.
+2. **Clean DB:** valid separation, no gap invalidation, prior DOWN, and neckline
+   break; exactly one normal confirmation remains possible.
+3. **Triangle past apex:** projected sides cross before breakout; candidate moves
+   to `STATUS_EXPIRED` and can never confirm later.
+4. **Both bilateral sides true:** direction stays zero regardless of breakout
+   confirmation mode; no bullish-first ternary preference.
+5. **Failed DB followed by overlapping valid DB:** the resolved candidate is
+   ignored by FORMING dedupe and cannot block the new structure.
+6. **Double separation:** two-bar separation rejects; eight bars remains eligible
+   when all other structure and context rules pass.
+7. **Flag crossed/unstable channel:** non-positive width or width change above
+   the configured 0.35 ratio rejects.
+8. **Micro Diamond:** duration below 10 bars or maximum width below 1.25 ATR
+   rejects before any Diamond subtype is offered.
+9. **Cup tiny handle:** one-bar handle rejects against the three-bar default;
+   chronology and maximum handle-duration ratio must also pass.
+10. **Generic same-bar alert:** multiple different accepted families increment
+    the event counter individually, while the generic alertcondition remains one
+    boolean bar event during detector validation.
 
 Review geometry first, followed by prior trend, classification, breakout
 accuracy, duplicate frequency, and false positives. Do not interpret detections

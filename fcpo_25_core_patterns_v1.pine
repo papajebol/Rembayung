@@ -62,7 +62,7 @@ float minBreakATR = input.float(0.10, "Minimum breakout strength ATR", 0.0, 2.0,
 bool relaxCupCurveFit = input.bool(false, "Relax Cup Curve Fit", group = G_BR)
 string invalidationMode = input.string("Wick", "Invalidation Mode", options = ["Wick", "Close"], group = G_BR)
 bool showForming = input.bool(false, "Show forming patterns", group = G_OUT)
-bool showConfirmed = input.bool(true, "Show confirmed patterns", group = G_OUT)
+bool showConfirmed = input.bool(true, "Show confirmed labels", group = G_OUT)
 bool showLow = input.bool(false, "Show low-quality patterns", group = G_OUT)
 bool showLines = input.bool(true, "Show pattern lines", group = G_OUT)
 bool showNeck = input.bool(true, "Show neckline", group = G_OUT)
@@ -112,6 +112,15 @@ float maxHandleDepthRatio = input.float(0.40, "Maximum cup handle depth ratio", 
 float minPennantContractionRatio = input.float(0.20, "Minimum pennant contraction ratio", 0.05, 0.90, step = 0.05, group = G_SEL)
 float minPennantStartWidthATR = input.float(0.75, "Minimum pennant start width ATR", 0.25, 10.0, step = 0.25, group = G_SEL)
 float minFlagRangeATR = input.float(0.50, "Minimum flag range ATR", 0.10, 5.0, step = 0.10, group = G_SEL)
+int minDoubleSeparationBars = input.int(4, "Minimum double separation bars", 1, 100, group = G_SEL)
+int maxDoubleSeparationBars = input.int(60, "Maximum double separation bars", 4, 300, group = G_SEL)
+int minTripleLegBars = input.int(3, "Minimum triple leg bars", 1, 100, group = G_SEL)
+int maxTripleSpanBars = input.int(90, "Maximum triple span bars", 6, 400, group = G_SEL)
+float maxFlagWidthChangeRatio = input.float(0.35, "Maximum flag width change ratio", 0.05, 1.0, step = 0.05, group = G_SEL)
+int minDiamondBars = input.int(10, "Minimum diamond bars", 6, 200, group = G_SEL)
+float minDiamondMaxWidthATR = input.float(1.25, "Minimum diamond maximum width ATR", 0.25, 10.0, step = 0.25, group = G_SEL)
+int minHandleBars = input.int(3, "Minimum Cup handle bars", 1, 50, group = G_SEL)
+float maxHandleDurationRatio = input.float(0.50, "Maximum Cup handle duration ratio", 0.10, 2.0, step = 0.10, group = G_SEL)
 float diamondBoundaryToleranceATR = input.float(0.30, "Diamond boundary tolerance ATR", 0.05, 1.0, step = 0.05, group = G_SEL)
 float displayClusterOverlap = input.float(0.55, "Display cluster overlap", 0.10, 1.0, step = 0.05, group = G_OUT)
 int displayClusterBreakoutBars = input.int(8, "Display cluster breakout bars", 1, 50, group = G_OUT)
@@ -150,6 +159,39 @@ f_lineValueAt(int firstBar, float firstPrice, int secondBar, float secondPrice, 
     if not na(firstPrice) and not na(secondPrice)
         result := secondBar == firstBar ? secondPrice : firstPrice + (secondPrice - firstPrice) / (secondBar - firstBar) * (targetBar - firstBar)
     result
+
+f_expiresAtBoundaryCross(string code) =>
+    code == "RW" or code == "FW" or code == "AT" or code == "DTR" or code == "ST" or code == "BPEN" or code == "SPEN"
+
+// Audits every bar that elapsed after the final pattern pivot but before the
+// candidate became knowable. Breakouts in this gap are deliberately ignored;
+// only structural invalidation prevents candidate creation.
+f_confirmationGapInvalidated(bool auditEnabled, int endBar, int expectedBreakout, int candidateInvalidMode, float invalidLevel, int upperBar1, float upperPrice1, int upperBar2, float upperPrice2, int lowerBar1, float lowerPrice1, int lowerBar2, float lowerPrice2) =>
+    bool invalidated = false
+    bool historyAvailable = not auditEnabled or bar_index >= endBar and bar_index - endBar <= 999
+    string reason = ""
+    if auditEnabled and historyAvailable and endBar < bar_index
+        for gapBar = endBar + 1 to bar_index
+            int gapOffset = bar_index - gapBar
+            float invalidationLow = invalidationMode == "Wick" ? low[gapOffset] : close[gapOffset]
+            float invalidationHigh = invalidationMode == "Wick" ? high[gapOffset] : close[gapOffset]
+            float gapATR = atr[gapOffset]
+            float gapBuffer = gapATR * breakoutMult
+            if na(invalidationLow) or na(invalidationHigh) or na(gapATR)
+                historyAvailable := false
+            else if not invalidated
+                if candidateInvalidMode == INVALID_STATIC and not na(invalidLevel)
+                    invalidated := expectedBreakout == BREAK_UP ? invalidationLow < invalidLevel : expectedBreakout == BREAK_DOWN ? invalidationHigh > invalidLevel : false
+                    reason := invalidated ? "confirmation-gap invalidation" : reason
+                else if candidateInvalidMode == INVALID_OPPOSITE_BOUNDARY
+                    float gapUpper = f_lineValueAt(upperBar1, upperPrice1, upperBar2, upperPrice2, gapBar)
+                    float gapLower = f_lineValueAt(lowerBar1, lowerPrice1, lowerBar2, lowerPrice2, gapBar)
+                    if na(gapUpper) or na(gapLower)
+                        historyAvailable := false
+                    else
+                        invalidated := expectedBreakout == BREAK_UP ? invalidationLow < gapLower - gapBuffer : expectedBreakout == BREAK_DOWN ? invalidationHigh > gapUpper + gapBuffer : false
+                        reason := invalidated ? "confirmation-gap opposite-boundary break" : reason
+    [invalidated, historyAvailable, reason]
 
 f_overlapRatio(int firstStart, int firstEnd, int secondStart, int secondEnd) =>
     int overlap = math.max(0, math.min(firstEnd, secondEnd) - math.max(firstStart, secondStart))
@@ -415,6 +457,7 @@ type PatternCandidate
     float invalidLevel
     float geometryScore
     float toleranceAtCreation
+    bool expiresAtBoundaryCross
     string pivotSignature
     label formingLabel
 
@@ -517,6 +560,20 @@ f_candidateShift() =>
         PatternCandidate removed = array.shift(candidates)
         f_deleteForming(removed)
 
+f_candidateMakeRoom() =>
+    while array.size(candidates) >= maxActive
+        int resolvedIndex = -1
+        if array.size(candidates) > 0
+            for cleanupIndex = 0 to array.size(candidates) - 1
+                PatternCandidate cleanupCandidate = array.get(candidates, cleanupIndex)
+                if resolvedIndex < 0 and cleanupCandidate.status != STATUS_FORMING
+                    resolvedIndex := cleanupIndex
+        if resolvedIndex >= 0
+            PatternCandidate removedResolved = array.remove(candidates, resolvedIndex)
+            f_deleteForming(removedResolved)
+        else
+            f_candidateShift()
+
 f_boundaryUpper(PatternCandidate candidate, int targetBar) =>
     f_lineValueAt(candidate.upperBar1, candidate.upperPrice1, candidate.upperBar2, candidate.upperPrice2, targetBar)
 
@@ -562,16 +619,23 @@ f_offer(string name, string code, int startBar, int endBar, int requiredTrend, i
     bool structurallyComplete = historyAvailable and endBar >= startBar and not na(geometryScore)
     bool contextAccepted = structurallyComplete and f_contextValid(code, requiredTrend, priorStrength, priorPersistence, contextMode, priorTrend)
     bool qualityAccepted = geometryScore >= minGeometryScore or showLow
+    bool auditGap = structurallyComplete and contextAccepted and qualityAccepted
+    [gapInvalidated, gapHistoryAvailable, gapReason] = f_confirmationGapInvalidated(auditGap, endBar, expectedBreakout, invalidMode, invalidLevel, upperBar1, upperPrice1, upperBar2, upperPrice2, lowerBar1, lowerPrice1, lowerBar2, lowerPrice2)
     float contextScore = priorTrend == TREND_ANY ? 35.0 : priorStrength
     float creationTolerance = f_tolerance(atr)
-    PatternCandidate proposed = PatternCandidate.new(name, code, startBar, endBar, bar_index, STATUS_FORMING, requiredTrend, expectedBreakout, contextMode, priorTrend, priorStrength, priorPersistence, contextScore, priorStructure, priorSlope, priorEMA, priorPersistenceScore, upperBar1, upperPrice1, upperBar2, upperPrice2, lowerBar1, lowerPrice1, lowerBar2, lowerPrice2, invalidMode, invalidLevel, geometryScore, creationTolerance, pivotSignature, na)
+    bool expiresAtCross = f_expiresAtBoundaryCross(code)
+    PatternCandidate proposed = PatternCandidate.new(name, code, startBar, endBar, bar_index, STATUS_FORMING, requiredTrend, expectedBreakout, contextMode, priorTrend, priorStrength, priorPersistence, contextScore, priorStructure, priorSlope, priorEMA, priorPersistenceScore, upperBar1, upperPrice1, upperBar2, upperPrice2, lowerBar1, lowerPrice1, lowerBar2, lowerPrice2, invalidMode, invalidLevel, geometryScore, creationTolerance, expiresAtCross, pivotSignature, na)
     int duplicateIndex = -1
+    bool resolvedSimilarIgnored = false
     if array.size(candidates) > 0
         for index = 0 to array.size(candidates) - 1
             PatternCandidate oldCandidate = array.get(candidates, index)
-            if f_candidateSimilar(oldCandidate, proposed)
+            bool similar = f_candidateSimilar(oldCandidate, proposed)
+            if oldCandidate.status == STATUS_FORMING and similar
                 duplicateIndex := index
-    bool accepted = contextAccepted and qualityAccepted
+            else if oldCandidate.status != STATUS_FORMING and similar
+                resolvedSimilarIgnored := true
+    bool accepted = contextAccepted and qualityAccepted and gapHistoryAvailable and not gapInvalidated
     if accepted and duplicateIndex >= 0
         PatternCandidate oldCandidate = array.get(candidates, duplicateIndex)
         if proposed.geometryScore > oldCandidate.geometryScore and oldCandidate.status == STATUS_FORMING
@@ -585,8 +649,7 @@ f_offer(string name, string code, int startBar, int endBar, int requiredTrend, i
             label duplicateDebug = label.new(bar_index, high, "SUPPRESS " + code + "\ncandidate duplicate", style = label.style_label_down, color = color.new(color.purple, 55), textcolor = color.white, size = size.tiny)
             f_manageLabel(duplicateDebug)
     else if accepted
-        while array.size(candidates) >= maxActive
-            f_candidateShift()
+        f_candidateMakeRoom()
         if showForming and showLabels
             proposed.formingLabel := label.new(bar_index, close, code + " FORMING\nQ:" + str.tostring(math.round(geometryScore)), style = label.style_label_left, color = color.new(color.orange, 25), textcolor = color.white, size = size.tiny)
             f_manageLabel(proposed.formingLabel)
@@ -594,8 +657,11 @@ f_offer(string name, string code, int startBar, int endBar, int requiredTrend, i
         if debugMode
             label acceptedDebugLabel = label.new(bar_index, low, code + " candidate\nBars: " + str.tostring(endBar - startBar) + "\nPrior: " + f_trendName(priorTrend) + " " + str.tostring(math.round(priorStrength)) + " (" + str.tostring(priorPersistence) + " bars)\nGeometry: " + str.tostring(math.round(geometryScore)) + "\nContext: " + str.tostring(math.round(contextScore)), style = label.style_label_up, color = color.new(color.blue, 55), textcolor = color.white, size = size.tiny)
             f_manageLabel(acceptedDebugLabel)
+            if resolvedSimilarIgnored
+                label resolvedDebugLabel = label.new(bar_index, low, "ALLOW " + code + "\nresolved candidate ignored by forming dedupe", style = label.style_label_up, color = color.new(color.teal, 55), textcolor = color.white, size = size.tiny)
+                f_manageLabel(resolvedDebugLabel)
     else if debugMode and duplicateIndex < 0
-        string reason = not structurallyComplete ? "history" : not contextAccepted ? "context" : "geometry " + str.tostring(math.round(geometryScore)) + " < " + str.tostring(minGeometryScore)
+        string reason = not structurallyComplete or not gapHistoryAvailable ? "history unavailable" : gapInvalidated ? gapReason : not contextAccepted ? "context" : "geometry " + str.tostring(math.round(geometryScore)) + " < " + str.tostring(minGeometryScore)
         label debugLabel = label.new(bar_index, high, "REJECT " + code + "\nTrend " + f_trendName(priorTrend) + " " + str.tostring(math.round(priorStrength)) + "\nTol " + str.tostring(levelTolerance, format.mintick) + " G " + str.tostring(math.round(geometryScore)) + "\n" + reason, style = label.style_label_down, color = color.new(color.gray, 60), textcolor = color.white, size = size.tiny)
         f_manageLabel(debugLabel)
 
@@ -642,28 +708,39 @@ if structuralPivotChanged and array.size(pivotTypes) >= 5
     // Equal-level reversal structures use explicit static neckline boundaries.
     if fDouble and f_pivotType(2) == f_pivotType(0) and f_equalLevel(c, e, patternATR)
         bool isTop = f_pivotType(0) == PIVOT_HIGH
+        int doubleSeparation = barE - barC
+        bool doubleSeparationValid = doubleSeparation >= minDoubleSeparationBars and doubleSeparation <= maxDoubleSeparationBars
         float neckline = d
         float doubleDepthATR = math.abs((c + e) / 2.0 - neckline) / math.max(patternATR, syminfo.mintick)
         float levelAccuracy = f_clamp(1.0 - math.abs(c - e) / math.max(f_tolerance(patternATR), syminfo.mintick))
         float geometry = f_clamp(levelAccuracy * 40.0 + math.min(doubleDepthATR / 2.0, 1.0) * 35.0 + temporalSymmetry / 100.0 * 25.0)
-        if isTop and doubleDepthATR >= minDoubleDepthATR
+        if isTop and doubleDepthATR >= minDoubleDepthATR and doubleSeparationValid
             f_offer("Double Top", "DT", barC, barE, TREND_UP, BREAK_DOWN, MODE_REVERSAL, barD, c + f_tolerance(patternATR), barD, c + f_tolerance(patternATR), barD, d, barD, d, INVALID_STATIC, math.max(c, e) + f_tolerance(patternATR), geometry, signature)
-        if not isTop and doubleDepthATR >= minDoubleDepthATR
+        if not isTop and doubleDepthATR >= minDoubleDepthATR and doubleSeparationValid
             f_offer("Double Bottom", "DB", barC, barE, TREND_DOWN, BREAK_UP, MODE_REVERSAL, barD, d, barD, d, barD, c - f_tolerance(patternATR), barD, c - f_tolerance(patternATR), INVALID_STATIC, math.min(c, e) - f_tolerance(patternATR), geometry, signature)
+        if debugMode and doubleDepthATR >= minDoubleDepthATR and not doubleSeparationValid
+            string doubleCode = isTop ? "DT" : "DB"
+            string separationReason = doubleSeparation < minDoubleSeparationBars ? "separation " + str.tostring(doubleSeparation) + " < " + str.tostring(minDoubleSeparationBars) : "separation " + str.tostring(doubleSeparation) + " > " + str.tostring(maxDoubleSeparationBars)
+            label doubleReject = label.new(bar_index, high, "REJECT " + doubleCode + "\n" + separationReason, style = label.style_label_down, color = color.new(color.gray, 55), textcolor = color.white, size = size.tiny)
+            f_manageLabel(doubleReject)
     if fTriple and f_pivotType(4) == f_pivotType(2) and f_pivotType(2) == f_pivotType(0) and f_equalLevel(a, c, patternATR) and f_equalLevel(c, e, patternATR)
         bool isTop = f_pivotType(0) == PIVOT_HIGH
+        bool tripleSpacingValid = barC - barA >= minTripleLegBars and barE - barC >= minTripleLegBars and barE - barA <= maxTripleSpanBars
         if isTop
             float support = math.min(b, d)
             float depthATR = ((a + c + e) / 3.0 - support) / math.max(patternATR, syminfo.mintick)
             float geometry = f_clamp(math.min(depthATR / 2.0, 1.0) * 45.0 + temporalSymmetry / 100.0 * 25.0 + 30.0 * (1.0 - math.max(math.abs(a - c), math.abs(c - e)) / math.max(f_tolerance(patternATR), syminfo.mintick)))
-            if depthATR >= minDoubleDepthATR
+            if depthATR >= minDoubleDepthATR and tripleSpacingValid
                 f_offer("Triple Top", "TT", barA, barE, TREND_UP, BREAK_DOWN, MODE_REVERSAL, barA, math.max(a, math.max(c, e)), barE, math.max(a, math.max(c, e)), barB, support, barD, support, INVALID_STATIC, math.max(a, math.max(c, e)) + f_tolerance(patternATR), geometry, signature)
         else
             float resistance = math.max(b, d)
             float depthATR = (resistance - (a + c + e) / 3.0) / math.max(patternATR, syminfo.mintick)
             float geometry = f_clamp(math.min(depthATR / 2.0, 1.0) * 45.0 + temporalSymmetry / 100.0 * 25.0 + 30.0 * (1.0 - math.max(math.abs(a - c), math.abs(c - e)) / math.max(f_tolerance(patternATR), syminfo.mintick)))
-            if depthATR >= minDoubleDepthATR
+            if depthATR >= minDoubleDepthATR and tripleSpacingValid
                 f_offer("Triple Bottom", "TB", barA, barE, TREND_DOWN, BREAK_UP, MODE_REVERSAL, barB, resistance, barD, resistance, barA, math.min(a, math.min(c, e)), barE, math.min(a, math.min(c, e)), INVALID_STATIC, math.min(a, math.min(c, e)) - f_tolerance(patternATR), geometry, signature)
+        if debugMode and not tripleSpacingValid
+            label tripleReject = label.new(bar_index, high, "REJECT " + (isTop ? "TT" : "TB") + "\npivot spacing invalid", style = label.style_label_down, color = color.new(color.gray, 55), textcolor = color.white, size = size.tiny)
+            f_manageLabel(tripleReject)
 
     // H&S uses the actual two neckline pivots and projects their line.
     if fHns and f_pivotType(4) == f_pivotType(2) and f_pivotType(2) == f_pivotType(0) and f_equalLevel(a, e, patternATR)
@@ -819,12 +896,17 @@ if structuralPivotChanged and fCup and array.size(pivotTypes) >= 4
     bool cupRimsSimilar = f_equalLevel(leftRim, rightRim, cupATR)
     float cupDepth = math.abs((leftRim + rightRim) / 2.0 - cupExtreme)
     float handleDepth = math.abs((leftRim + rightRim) / 2.0 - handleExtreme)
+    int cupFormationBars = rightRimBar - leftRimBar
+    int handleBars = handleBar - rightRimBar
+    float maximumHandleBars = cupFormationBars * maxHandleDurationRatio
+    bool cupChronologyValid = handleBar > rightRimBar and rightRimBar > cupExtremeBar and cupExtremeBar > leftRimBar
+    bool handleDurationValid = cupChronologyValid and cupFormationBars > 0 and handleBars >= minHandleBars and handleBars <= maximumHandleBars
     bool shallowHandle = cupDepth > 0.0 and handleDepth / cupDepth <= maxHandleDepthRatio
     bool bullishShape = f_pivotType(3) == PIVOT_HIGH and f_pivotType(2) == PIVOT_LOW and f_pivotType(1) == PIVOT_HIGH and f_pivotType(0) == PIVOT_LOW
     bool bearishShape = f_pivotType(3) == PIVOT_LOW and f_pivotType(2) == PIVOT_HIGH and f_pivotType(1) == PIVOT_LOW and f_pivotType(0) == PIVOT_HIGH
     bool curveQuality = not na(cupR2) and cupR2 >= (relaxCupCurveFit ? minR2 : math.max(minR2, 0.70)) and cupVertexCentral
-    bool bullishCup = bullishShape and cupCurve > 0.0 and curveQuality and cupRimsSimilar and cupDepth / math.max(cupATR, syminfo.mintick) >= minRoundingHeightATR and handleExtreme > cupExtreme + cupDepth * 0.60 and shallowHandle
-    bool bearishCup = bearishShape and cupCurve < 0.0 and curveQuality and cupRimsSimilar and cupDepth / math.max(cupATR, syminfo.mintick) >= minRoundingHeightATR and handleExtreme < cupExtreme - cupDepth * 0.60 and shallowHandle
+    bool bullishCup = bullishShape and handleDurationValid and cupCurve > 0.0 and curveQuality and cupRimsSimilar and cupDepth / math.max(cupATR, syminfo.mintick) >= minRoundingHeightATR and handleExtreme > cupExtreme + cupDepth * 0.60 and shallowHandle
+    bool bearishCup = bearishShape and handleDurationValid and cupCurve < 0.0 and curveQuality and cupRimsSimilar and cupDepth / math.max(cupATR, syminfo.mintick) >= minRoundingHeightATR and handleExtreme < cupExtreme - cupDepth * 0.60 and shallowHandle
     float rimAccuracy = f_clamp(1.0 - math.abs(leftRim - rightRim) / math.max(f_tolerance(cupATR), syminfo.mintick))
     float cupFitUnit = not na(cupR2) ? math.max(0.0, math.min(1.0, (cupR2 - minR2) / math.max(1.0 - minR2, 0.01))) : 0.0
     float cupGeometry = f_clamp(rimAccuracy * 25.0 + cupFitUnit * 30.0 + math.min(cupDepth / math.max(cupATR * 2.0, syminfo.mintick), 1.0) * 25.0 + (1.0 - handleDepth / math.max(cupDepth, syminfo.mintick)) * 20.0)
@@ -835,6 +917,10 @@ if structuralPivotChanged and fCup and array.size(pivotTypes) >= 4
     if bearishCup
         float rimSupport = math.min(leftRim, rightRim)
         f_offer("Inverted Cup and Handle", "ICUP", leftRimBar, handleBar, TREND_DOWN, BREAK_DOWN, MODE_CONTINUATION, handleBar, handleExtreme, handleBar, handleExtreme, leftRimBar, rimSupport, rightRimBar, rimSupport, INVALID_STATIC, cupExtreme + f_tolerance(cupATR), cupGeometry, cupSignature)
+    if debugMode and (bullishShape or bearishShape) and not handleDurationValid
+        string handleReason = not cupChronologyValid ? "handle chronology invalid" : handleBars < minHandleBars ? "handle duration " + str.tostring(handleBars) + " < " + str.tostring(minHandleBars) : "handle duration " + str.tostring(handleBars) + " > allowed " + str.tostring(maximumHandleBars, "#.##")
+        label cupReject = label.new(bar_index, high, "REJECT CUP\n" + handleReason, style = label.style_label_down, color = color.new(color.gray, 55), textcolor = color.white, size = size.tiny)
+        f_manageLabel(cupReject)
 
 // Flags and pennants need a preceding pivot: pole ends exactly at pattern start,
 // while consolidation measurements stop exactly at pattern end.
@@ -874,7 +960,10 @@ if structuralPivotChanged and array.size(pivotTypes) >= 6
     float durationPoints = math.min(consolidationBars * 1.0 / math.max(minFlagBars * 2.0, 1), 1.0) * 10.0
     float flagGeometry = f_clamp(polePoints + compactPoints + parallelPoints + durationPoints)
     bool flagDurationValid = consolidationBars >= minFlagBars and consolidationBars <= maxFlagBars
-    if fFlag and smallConsolidation and flagRangeATR >= minFlagRangeATR and flagDurationValid and not na(upperSlope) and not na(lowerSlope) and math.abs(upperSlope - lowerSlope) < 0.04
+    bool flagWidthsPositive = startWidth > 0.0 and endWidth > 0.0
+    float flagWidthChangeRatio = flagWidthsPositive ? math.abs(endWidth - startWidth) / math.max(startWidth, syminfo.mintick) : na
+    bool flagWidthStable = flagWidthsPositive and flagWidthChangeRatio <= maxFlagWidthChangeRatio
+    if fFlag and smallConsolidation and flagRangeATR >= minFlagRangeATR and flagDurationValid and flagWidthStable and not na(upperSlope) and not na(lowerSlope) and math.abs(upperSlope - lowerSlope) < 0.04
         bool bullFlag = poleMove > 0.0 and upperSlope <= 0.025 and lowerSlope <= 0.025 and upperSlope >= -0.20 and lowerSlope >= -0.20
         bool bearFlag = poleMove < 0.0 and upperSlope >= -0.025 and lowerSlope >= -0.025 and upperSlope <= 0.20 and lowerSlope <= 0.20
         if bullFlag
@@ -884,6 +973,10 @@ if structuralPivotChanged and array.size(pivotTypes) >= 6
     if debugMode and fFlag and smallConsolidation and flagRangeATR < minFlagRangeATR
         label flagReject = label.new(bar_index, high, "REJECT FLAG\nrange " + str.tostring(flagRangeATR, "#.##") + " ATR < " + str.tostring(minFlagRangeATR, "#.##"), style = label.style_label_down, color = color.new(color.gray, 55), textcolor = color.white, size = size.tiny)
         f_manageLabel(flagReject)
+    if debugMode and fFlag and smallConsolidation and flagRangeATR >= minFlagRangeATR and flagDurationValid and not flagWidthStable
+        string flagWidthReason = not flagWidthsPositive ? "channel boundaries crossed" : "width instability " + str.tostring(flagWidthChangeRatio * 100.0, "#.0") + "% > " + str.tostring(maxFlagWidthChangeRatio * 100.0, "#.0") + "%"
+        label flagWidthReject = label.new(bar_index, high, "REJECT FLAG\n" + flagWidthReason, style = label.style_label_down, color = color.new(color.gray, 55), textcolor = color.white, size = size.tiny)
+        f_manageLabel(flagWidthReject)
     float pennantContraction = startWidth > 0.0 ? (startWidth - endWidth) / startWidth : 0.0
     float pennantStartWidthATR = startWidth / math.max(poleATRValue, syminfo.mintick)
     float pennantGeometry = f_clamp(polePoints + compactPoints + math.min(pennantContraction / 0.60, 1.0) * 25.0 + math.min(consolidationBars * 1.0 / math.max(minPennantBars * 2.0, 1), 1.0) * 10.0)
@@ -918,14 +1011,21 @@ if structuralPivotChanged and fDiamond and array.size(pivotTypes) >= 7
     float lateWidth = lateHigh - lateLow
     int finalPivotBar = f_pivotBar(0)
     float finalPivotPrice = f_pivotPrice(0)
+    int diamondStart = f_pivotBar(6)
+    int diamondEnd = finalPivotBar
+    float diamondATR = f_pivotATR(0)
+    int diamondBars = diamondEnd - diamondStart
+    float widestWidthATR = widestWidth / math.max(diamondATR, syminfo.mintick)
+    float projectedFinalUpper = f_lineValueAt(middleHighBar, middleHigh, lateHighBar, lateHigh, finalPivotBar)
+    float projectedFinalLower = f_lineValueAt(middleLowBar, middleLow, lateLowBar, lateLow, finalPivotBar)
+    float finalProjectedWidth = projectedFinalUpper - projectedFinalLower
     float projectedFinalBoundary = f_pivotType(0) == PIVOT_HIGH ? f_lineValueAt(middleHighBar, middleHigh, lateHighBar, lateHigh, finalPivotBar) : f_lineValueAt(middleLowBar, middleLow, lateLowBar, lateLow, finalPivotBar)
     float diamondTolerance = math.max(syminfo.mintick * minTicks, f_pivotATR(0) * diamondBoundaryToleranceATR)
     bool finalPivotValid = not na(projectedFinalBoundary) and math.abs(finalPivotPrice - projectedFinalBoundary) <= diamondTolerance
-    bool diamondGeometry = earlyWidth > 0.0 and widestWidth > earlyWidth and lateWidth > 0.0 and lateWidth < widestWidth and lateHigh < middleHigh and lateLow > middleLow and finalPivotValid
+    bool finalContractionValid = finalProjectedWidth > 0.0 and finalProjectedWidth <= lateWidth + diamondTolerance * 2.0 and finalProjectedWidth < widestWidth
+    bool diamondSizeValid = diamondBars >= minDiamondBars and widestWidthATR >= minDiamondMaxWidthATR
+    bool diamondGeometry = earlyWidth > 0.0 and widestWidth > earlyWidth and lateWidth > 0.0 and lateWidth < widestWidth and lateHigh < middleHigh and lateLow > middleLow and finalPivotValid and finalContractionValid and diamondSizeValid
     if diamondGeometry
-        int diamondStart = f_pivotBar(6)
-        int diamondEnd = f_pivotBar(0)
-        float diamondATR = f_pivotATR(0)
         float expansionUnit = math.min((widestWidth - earlyWidth) / math.max(earlyWidth, diamondATR) / 0.60, 1.0)
         float contractionUnit = math.min((widestWidth - lateWidth) / math.max(widestWidth, diamondATR) / 0.60, 1.0)
         float boundaryUnit = math.max(0.0, 1.0 - math.abs(finalPivotPrice - projectedFinalBoundary) / math.max(diamondTolerance, syminfo.mintick))
@@ -935,6 +1035,10 @@ if structuralPivotChanged and fDiamond and array.size(pivotTypes) >= 7
         f_offer("Diamond Bottom", "DIA-B", diamondStart, diamondEnd, TREND_DOWN, BREAK_UP, MODE_REVERSAL, middleHighBar, middleHigh, lateHighBar, lateHigh, middleLowBar, middleLow, lateLowBar, lateLow, INVALID_OPPOSITE_BOUNDARY, na, diamondQuality, diamondSignature)
         f_offer("Bullish Continuation Diamond", "DIA-CU", diamondStart, diamondEnd, TREND_UP, BREAK_UP, MODE_CONTINUATION, middleHighBar, middleHigh, lateHighBar, lateHigh, middleLowBar, middleLow, lateLowBar, lateLow, INVALID_OPPOSITE_BOUNDARY, na, diamondQuality, diamondSignature)
         f_offer("Bearish Continuation Diamond", "DIA-CD", diamondStart, diamondEnd, TREND_DOWN, BREAK_DOWN, MODE_CONTINUATION, middleHighBar, middleHigh, lateHighBar, lateHigh, middleLowBar, middleLow, lateLowBar, lateLow, INVALID_OPPOSITE_BOUNDARY, na, diamondQuality, diamondSignature)
+    if debugMode and earlyWidth > 0.0 and widestWidth > earlyWidth and lateWidth > 0.0 and lateWidth < widestWidth and finalPivotValid and finalContractionValid and not diamondSizeValid
+        string diamondReason = diamondBars < minDiamondBars ? "bars " + str.tostring(diamondBars) + " < " + str.tostring(minDiamondBars) : "width " + str.tostring(widestWidthATR, "#.##") + " ATR < " + str.tostring(minDiamondMaxWidthATR, "#.##")
+        label diamondReject = label.new(bar_index, high, "REJECT DIAMOND\n" + diamondReason, style = label.style_label_down, color = color.new(color.gray, 55), textcolor = color.white, size = size.tiny)
+        f_manageLabel(diamondReject)
 
 // Bump-and-run: bounded chronological regressions compare a lead-in segment to
 // an accelerated bump segment. The projected lead-in reference confirms run.
@@ -972,17 +1076,19 @@ if barstate.isconfirmed and array.size(candidates) > 0
             int age = bar_index - candidate.knowledgeBar
             float upperBoundary = f_boundaryUpper(candidate, bar_index)
             float lowerBoundary = f_boundaryLower(candidate, bar_index)
+            bool apexPassed = candidate.expiresAtBoundaryCross and not na(upperBoundary) and not na(lowerBoundary) and upperBoundary <= lowerBoundary
             float bullishPrice = requireClose ? close : high
             float bearishPrice = requireClose ? close : low
             bool bullishBreak = not na(upperBoundary) and bullishPrice > upperBoundary + breakoutBuffer
             bool bearishBreak = not na(lowerBoundary) and bearishPrice < lowerBoundary - breakoutBuffer
-            bool ambiguousBreakout = not requireClose and candidate.expectedBreakout == BREAK_BILATERAL and bullishBreak and bearishBreak
+            bool ambiguousBreakout = candidate.expectedBreakout == BREAK_BILATERAL and bullishBreak and bearishBreak
             int direction = ambiguousBreakout ? 0 : candidate.expectedBreakout == BREAK_UP and bullishBreak ? BREAK_UP : candidate.expectedBreakout == BREAK_DOWN and bearishBreak ? BREAK_DOWN : candidate.expectedBreakout == BREAK_BILATERAL and bullishBreak ? BREAK_UP : candidate.expectedBreakout == BREAK_BILATERAL and bearishBreak ? BREAK_DOWN : 0
             float bullishInvalidationPrice = invalidationMode == "Wick" ? low : close
             float bearishInvalidationPrice = invalidationMode == "Wick" ? high : close
             bool staticFailure = candidate.invalidMode == INVALID_STATIC and not na(candidate.invalidLevel) and (candidate.expectedBreakout == BREAK_UP ? bullishInvalidationPrice < candidate.invalidLevel : candidate.expectedBreakout == BREAK_DOWN ? bearishInvalidationPrice > candidate.invalidLevel : false)
             bool boundaryFailure = candidate.invalidMode == INVALID_OPPOSITE_BOUNDARY and (candidate.expectedBreakout == BREAK_UP ? not na(lowerBoundary) and bullishInvalidationPrice < lowerBoundary - breakoutBuffer : candidate.expectedBreakout == BREAK_DOWN ? not na(upperBoundary) and bearishInvalidationPrice > upperBoundary + breakoutBuffer : false)
-            bool expired = age > maxAge
+            bool expiredByAge = age > maxAge
+            bool expired = expiredByAge or apexPassed
             bool invalidated = staticFailure or boundaryFailure
             bool sameBarConflict = invalidated and direction != 0
             float breakoutLevel = direction == BREAK_UP ? upperBoundary : direction == BREAK_DOWN ? lowerBoundary : na
@@ -993,9 +1099,15 @@ if barstate.isconfirmed and array.size(candidates) > 0
                 candidate.status := expired ? STATUS_EXPIRED : STATUS_FAILED
                 f_deleteForming(candidate)
                 if debugMode
-                    string failureReason = sameBarConflict ? "same-bar structural invalidation" : expired ? "expired" : "structural invalidation (" + invalidationMode + ")"
-                    label failedLabel = label.new(bar_index, close, candidate.code + " FAILED\n" + failureReason, color = color.new(color.red, 55), textcolor = color.white, size = size.tiny)
+                    string failureReason = apexPassed ? "pattern apex passed" : sameBarConflict ? "same-bar structural invalidation" : expiredByAge ? "expired" : "structural invalidation (" + invalidationMode + ")"
+                    string failurePrefix = apexPassed ? "EXPIRE " : "FAILED "
+                    label failedLabel = label.new(bar_index, close, failurePrefix + candidate.code + "\n" + failureReason, color = color.new(color.red, 55), textcolor = color.white, size = size.tiny)
                     f_manageLabel(failedLabel)
+            else if ambiguousBreakout
+                activeCount += 1
+                if debugMode
+                    label ambiguousLabel = label.new(bar_index, close, "AMBIGUOUS " + candidate.code + "\nboth breakout boundaries satisfied", color = color.new(color.orange, 55), textcolor = color.white, size = size.tiny)
+                    f_manageLabel(ambiguousLabel)
             else if direction != 0 and strengthAccepted
                 candidate.status := STATUS_CONFIRMED_INTERNAL
                 f_deleteForming(candidate)

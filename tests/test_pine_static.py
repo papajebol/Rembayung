@@ -114,4 +114,31 @@ assert "priorSlopeComponent" in text
 assert "priorEMAComponent" in text
 assert "priorPersistenceComponent" in text
 
+# Round 4 confirmation-gap, apex, cleanup, and compact-geometry guards.
+assert "f_confirmationGapInvalidated(" in text
+assert "for gapBar = endBar + 1 to bar_index" in text
+assert "confirmation-gap invalidation" in text
+assert "confirmation-gap opposite-boundary break" in text
+assert "gapHistoryAvailable and not gapInvalidated" in text
+assert "f_expiresAtBoundaryCross(" in text
+assert "expiresAtBoundaryCross" in text
+assert "upperBoundary <= lowerBoundary" in text
+assert "pattern apex passed" in text
+assert "candidate.expectedBreakout == BREAK_BILATERAL and bullishBreak and bearishBreak" in text
+assert "not requireClose and candidate.expectedBreakout" not in text
+assert "oldCandidate.status == STATUS_FORMING and similar" in text
+assert "cleanupCandidate.status != STATUS_FORMING" in text
+assert "array.remove(candidates, resolvedIndex)" in text
+assert "minDoubleSeparationBars" in text and "maxDoubleSeparationBars" in text
+assert "doubleSeparationValid" in text
+assert "minTripleLegBars" in text and "maxTripleSpanBars" in text
+assert "tripleSpacingValid" in text
+assert "flagWidthsPositive" in text and "flagWidthChangeRatio" in text
+assert "maxFlagWidthChangeRatio" in text
+assert "minDiamondBars" in text and "minDiamondMaxWidthATR" in text
+assert "finalContractionValid" in text and "diamondSizeValid" in text
+assert "minHandleBars" in text and "maxHandleDurationRatio" in text
+assert "cupChronologyValid" in text and "handleDurationValid" in text
+assert 'input.bool(true, "Show confirmed labels"' in text
+
 print("PASS: repository Pine invariants (not a TradingView compiler test)")
