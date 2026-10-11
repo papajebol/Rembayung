@@ -1,0 +1,777 @@
+%PDF-1.4
+%
+1 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+2 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+4 0 obj
+<< /Length 4895 >>
+stream
+0.180 0.250 0.360 RG 0.12 w 47 800 m 548 800 l S
+0.250 0.300 0.380 rg BT /F2 7.50 Tf 1 0 0 1 52.00 808.00 Tm (SQ9 v0.2 Mathematical Audit) Tj ET
+0.350 0.350 0.350 rg BT /F1 7.50 Tf 1 0 0 1 490.00 28.00 Tm (Page 1) Tj ET
+0.050 0.200 0.340 rg 0 592 595 250 re f
+1.000 1.000 1.000 rg BT /F2 25.00 Tf 1 0 0 1 52.00 737.00 Tm (SQ9 Auto Plan Compiler v0.2) Tj ET
+0.780 0.900 0.980 rg BT /F2 17.00 Tf 1 0 0 1 52.00 699.00 Tm (Mathematical Audit and US Equities) Tj ET
+0.780 0.900 0.980 rg BT /F2 17.00 Tf 1 0 0 1 52.00 673.00 Tm (Price-Mapping Resolution) Tj ET
+0.900 0.940 0.970 rg BT /F1 10.50 Tf 1 0 0 1 52.00 632.00 Tm (Assessment only - no application implementation) Tj ET
+0.050 0.220 0.380 rg BT /F2 15.00 Tf 1 0 0 1 52.00 544.00 Tm (SQ9 Auto Plan Compiler v0.2) Tj ET
+0.700 0.780 0.840 RG 0.7 w 52 519.25 m 543 519.25 l S
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 506.25 Tm (Mathematical Audit and US Equities Price-Mapping Resolution) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 483.01 Tm (Assessment date: 11 October 2026) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 467.77 Tm (Scope: Mathematical assessment only; no application implementation) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 452.54 Tm (Authorial role: Quantitative mathematics, financial systems, and Python algorithm audit) Tj ET
+0.050 0.220 0.380 rg BT /F2 15.00 Tf 1 0 0 1 52.00 421.30 Tm (EXECUTIVE CONCLUSION) Tj ET
+0.700 0.780 0.840 RG 0.7 w 52 396.552 m 543 396.552 l S
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 389.55 Tm (The supplied Python v0.2 calculation engine was analyzed directly and reproduced in temporary) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 377.32 Tm (standalone Python executions. The audit did not substitute a conventional Square of Nine formula for) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 365.08 Tm (the supplied implementation.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 346.84 Tm (Principal findings:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 328.61 Tm (1. The 19 x 19 spiral is internally correct. It contains exactly 361 unique cells and exactly the) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 316.37 Tm (ordinals 1 through 361, with the documented orientation.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 303.14 Tm (2. There are exactly 73 harmonic ordinals: the center plus 72 points distributed evenly across eight) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 290.90 Tm (rays.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 277.66 Tm (3. Under the validated BUY and SELL pivot relationships, BUY and SELL have identical normalized) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 265.43 Tm (ordinal feasibility. Both always use adverse ordinal direction -1.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 252.19 Tm (4. A complete stop pair exists precisely when EP1 is one of the 64 harmonics from ordinal 11 through) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 239.96 Tm (361. In an accepted plan with a target still available, EP1 is necessarily at most 352.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 226.72 Tm (5. Define D = abs\(Close - Pivot\), a = abs\(Increment\), u = D/a, and v = Norm/a. A legacy-accepted) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 214.48 Tm (plan exists exactly when 10 < u < 360. A full six-level plan, including TP2, exists exactly when 10) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 202.25 Tm (< u < 351 and u + v <= 355.5.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 189.01 Tm (6. The corresponding legacy feasible scale interval is D/360 < a < D/10. The full-plan scale domain) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 176.78 Tm (is a > D/351, a >= \(D+N\)/355.5, and a < D/10.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 163.54 Tm (7. Pivot, Close, Norm, and Direction do not uniquely identify the scale. A further calibration) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 151.30 Tm (convention is mathematically unavoidable.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 138.07 Tm (8. If no new user input may be added, the recommended deterministic convention is a =) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 125.83 Tm (abs\(Close-Pivot\)/11, with Increment +a for BUY and -a for SELL. This places Close at normalized) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 113.60 Tm (coordinate x=12 and makes EP1 ordinal 11, the first harmonic possessing both legacy angular stops.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 101.36 Tm (This is an explicit engineering calibration, not a uniquely discovered SQ9 constant and not evidence) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 89.12 Tm (of trading edge.) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Length 5165 >>
+stream
+0.180 0.250 0.360 RG 0.12 w 47 800 m 548 800 l S
+0.250 0.300 0.380 rg BT /F2 7.50 Tf 1 0 0 1 52.00 808.00 Tm (SQ9 v0.2 Mathematical Audit) Tj ET
+0.350 0.350 0.350 rg BT /F1 7.50 Tf 1 0 0 1 490.00 28.00 Tm (Page 2) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 786.00 Tm (9. If an additional manual input is permitted, the more transparent design is to let the user supply) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 773.76 Tm (the calibrated positive scale a, validate it against the exact feasibility interval, and record it) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 761.53 Tm (in the result.) Tj ET
+0.050 0.220 0.380 rg BT /F2 15.00 Tf 1 0 0 1 52.00 732.29 Tm (SECTION A - SOURCE CODE AUDIT) Tj ET
+0.700 0.780 0.840 RG 0.7 w 52 707.542 m 543 707.542 l S
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 691.54 Tm (A1. Scope and method) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 668.30 Tm (The supplied build_spiral, coordinate map, harmonic selection, price mapping, entry, target, ray,) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 656.07 Tm (angular stop, and complete plan functions were transcribed without behavioral changes into temporary) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 643.83 Tm (inline Python programs. The GUI is irrelevant to these calculations.) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 616.59 Tm (A2. Spiral construction) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 593.35 Tm (Executed verification returned:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 575.12 Tm (- Coordinate count: 361.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 561.88 Tm (- Unique coordinate count: 361.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 548.65 Tm (- Assigned ordinal count: 361.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 535.41 Tm (- Unique ordinal count: 361.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 522.17 Tm (- Ordinal range: 1 through 361.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 508.94 Tm (- Missing ordinals: none.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 495.70 Tm (- Duplicate coordinates: none.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 482.47 Tm (- Center: ordinal 1 at relative coordinate \(0,0\).) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 469.23 Tm (- Absolute center array position: \(9,9\).) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 452.99 Tm (The first ring is:) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 434.76 Tm (Coordinate | Ordinal) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 424.56 Tm (\(-1,-1\) | 3) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 414.36 Tm (\(-1,0\)  | 4) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 404.16 Tm (\(-1,1\)  | 5) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 393.96 Tm (\(0,-1\)  | 2) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 383.76 Tm (\(0,0\)   | 1) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 373.56 Tm (\(0,1\)   | 6) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 363.36 Tm (\(1,-1\)  | 9) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 353.16 Tm (\(1,0\)   | 8) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 342.96 Tm (\(1,1\)   | 7) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 325.76 Tm (Therefore the documented orientation is verified:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 307.52 Tm (3 4 5) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 292.29 Tm (2 1 6) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 277.05 Tm (9 8 7) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 258.81 Tm (Construction classification:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 240.58 Tm (- Verified behavior: correct 361-cell spiral for configured size 19.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 227.34 Tm (- Design assumption: the size is odd and has a unique central cell.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 214.11 Tm (- No v0.2 anomaly: there are no missing or duplicated coordinates or ordinals.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 200.87 Tm (- Generalization caution: correctness for arbitrary even sizes is not established, but is irrelevant) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 188.63 Tm (to the fixed canonical grid.) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 163.40 Tm (A3. Harmonic classification behavior) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 140.16 Tm (An ordinal is harmonic exactly when its relative coordinate satisfies row=0, column=0, or) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 127.92 Tm (abs\(row\)=abs\(column\). This is the union of two cardinal axes and two diagonals. Center ordinal 1) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 115.69 Tm (belongs to both cardinal and diagonal predicates but occurs once in HARMONIC_N.) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 88.45 Tm (A4. Price mapping) Tj ET
+endstream
+endobj
+6 0 obj
+<< /Length 6098 >>
+stream
+0.180 0.250 0.360 RG 0.12 w 47 800 m 548 800 l S
+0.250 0.300 0.380 rg BT /F2 7.50 Tf 1 0 0 1 52.00 808.00 Tm (SQ9 v0.2 Mathematical Audit) Tj ET
+0.350 0.350 0.350 rg BT /F1 7.50 Tf 1 0 0 1 490.00 28.00 Tm (Page 3) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 786.00 Tm (The exact mapping is:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 767.76 Tm (P\(n\) = Pivot + \(n-1\) * Increment.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 749.53 Tm (For original v0.2 behavior:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 731.29 Tm (- BUY requires Pivot < Close and therefore receives Increment +1.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 718.06 Tm (- SELL requires Pivot > Close and therefore receives Increment -1.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 701.82 Tm (Increasing ordinal consequently moves from Pivot toward Close and then toward the profit side in both) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 689.58 Tm (directions. The increment direction is consistent with pivot validation.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 671.35 Tm (Embedded assumptions:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 653.11 Tm (1. One ordinal step is exactly one price unit.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 639.88 Tm (2. The same scale applies throughout the grid.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 626.64 Tm (3. The price embedding is affine, with no nonlinear transformation.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 613.40 Tm (4. Pivot is assigned to ordinal 1.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 600.17 Tm (5. Increment sign is fixed by Pivot-to-Close orientation.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 586.93 Tm (6. Increment magnitude 1 is hard-coded and is not derived from grid geometry.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 573.70 Tm (7. Harmonic membership is ordinal-based, not quotation-tick-based.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 560.46 Tm (8. Negative generated prices are not rejected.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 547.22 Tm (9. Prices use binary floating point.) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 521.99 Tm (A5. Entry algorithm) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 498.75 Tm (Let ordered harmonics be h1 < h2 < ... < h73, with h1=1 and h73=361. For generalized positive scale a) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 486.51 Tm (define x=1+D/a=1+u.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 468.28 Tm (For both valid BUY and valid SELL, an entry harmonic is eligible exactly when h_i < x. This is a) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 456.04 Tm (strict inequality. Eligible harmonics are ordered nearest to Close first. EP1 is the largest harmonic) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 443.80 Tm (below x and EP2 is the second largest.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 425.57 Tm (Exact piecewise rule: EP1=h_j and EP2=h_\(j-1\) exactly when h_j < x <= h_\(j+1\), equivalently h_j-1 < u) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 413.33 Tm (<= h_\(j+1\)-1. At x equal to a harmonic h_k, h_k is excluded; the pair remains h_\(k-1\), h_\(k-2\).) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 395.10 Tm (For valid pivots u>0. No eligible entry is then impossible. Exactly one entry exists when 0<u<=1. At) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 382.86 Tm (least two entries exist exactly when u>1.) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 355.62 Tm (A6. Target algorithm) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 332.38 Tm (RawTP is Close+Norm for BUY and Close-Norm for SELL. In normalized coordinates both become) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 320.15 Tm (y=x+v=1+u+v.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 301.91 Tm (Profit-side harmonics satisfy h_i>x. TP1 minimizes abs\(h_i-y\). The secondary tuple key minimizes) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 289.68 Tm (abs\(h_i-x\). Because all eligible candidates are above x in normalized ordinal space, an exact midpoint) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 277.44 Tm (tie selects the lower ordinal, which is closer to Close.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 259.20 Tm (TP2 is the immediately following eligible harmonic beyond TP1. TP1 exists exactly when x<361,) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 246.97 Tm (equivalently u<360. RawTP may lie beyond grid coverage without causing TP1 failure: the nearest) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 234.73 Tm (eligible harmonic, often 361, is still returned. If TP1 is 361, TP2 is None, and calculate_plan) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 222.50 Tm (accepts the plan.) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 195.26 Tm (A7. Stop-loss algorithm) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 172.02 Tm (ray_of_n returns None for center ordinal 1 and non-harmonics. Otherwise it reduces row and column to) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 159.78 Tm (signs, identifying one of eight discrete rays. n_on_ray returns the harmonic ordinals on a ray.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 141.55 Tm (adverse_ordinal_sign gives:) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 123.31 Tm (Direction | Increment sign | Adverse ordinal sign) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 113.11 Tm (BUY       | positive       | -1) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 102.91 Tm (BUY       | negative       | +1) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 92.71 Tm (SELL      | positive       | +1) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 82.51 Tm (SELL      | negative       | -1) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Length 6366 >>
+stream
+0.180 0.250 0.360 RG 0.12 w 47 800 m 548 800 l S
+0.250 0.300 0.380 rg BT /F2 7.50 Tf 1 0 0 1 52.00 808.00 Tm (SQ9 v0.2 Mathematical Audit) Tj ET
+0.350 0.350 0.350 rg BT /F1 7.50 Tf 1 0 0 1 490.00 28.00 Tm (Page 4) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 786.00 Tm (All inputs admitted by calculate_plan use -1: BUY has positive Increment and SELL has negative) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 773.76 Tm (Increment.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 755.53 Tm (For actual validated cases, the 181 stop forms theoretical target \(sqrt\(e\)-1\)^2, searches the opposite) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 743.29 Tm (ray, requires candidate n<e, and selects the nearest available candidate. The 361 stop forms) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 731.06 Tm (theoretical target \(sqrt\(e\)-2\)^2, searches the same ray, requires n<e, and selects the nearest) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 718.82 Tm (candidate.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 700.58 Tm (The returned ordinal is not assumed to equal the theoretical square-root target. The theoretical value) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 688.35 Tm (is only the center of a nearest-candidate search constrained by harmonic membership, ray, adverse) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 676.11 Tm (ordinal direction, and the finite grid. The 181 and 361 labels describe these discrete implementation) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 663.88 Tm (rules, not literal continuous rotations of a stock price.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 645.64 Tm (Implementation defect: root_delta = 1 if degrees == 181 else 2. Every unsupported degree silently) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 633.40 Tm (receives root displacement 2, and every value other than exactly 181 uses the same-ray branch. This is) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 621.17 Tm (a validation defect, not permission to alter the intended two stop methods.) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 593.93 Tm (A8. Classification verdict) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 570.69 Tm (Finding | Classification) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 560.49 Tm (Correct 361-cell size-19 spiral | Verified behavior) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 550.29 Tm (Correct documented orientation | Verified behavior) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 540.09 Tm (73 union harmonics | Verified behavior) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 529.89 Tm (Pivot fixed at ordinal 1 | Design assumption) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 519.69 Tm (One-dollar increment magnitude | Design assumption) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 509.49 Tm (Affine price mapping | Design assumption) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 499.29 Tm (Strict entry and target comparisons | Verified behavior) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 489.09 Tm (TP2 may be None while plan succeeds | Verified behavior) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 478.89 Tm (Nearest ray candidate may differ from theoretical square | Mathematical limitation) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 468.69 Tm (Finite ray/grid boundaries can prevent stops | Mathematical limitation) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 458.49 Tm (Unsupported degrees use the non-181 branch | Implementation defect) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 448.29 Tm (No positivity check on generated levels | Implementation defect / omitted domain validation) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 438.09 Tm (Float comparisons and outputs | Implementation limitation) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 427.89 Tm (Selecting an equity scale | Requires external methodological decision) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 417.69 Tm (Predictive value or profitability | Requires external empirical decision) Tj ET
+0.050 0.220 0.380 rg BT /F2 15.00 Tf 1 0 0 1 52.00 387.49 Tm (SECTION B - COMPLETE HARMONIC GEOMETRY) Tj ET
+0.700 0.780 0.840 RG 0.7 w 52 362.742 m 543 362.742 l S
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 346.74 Tm (B1. Exact harmonic ordinals) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 323.50 Tm (There are 73 harmonics:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 305.27 Tm (1,) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 290.03 Tm (2, 3, 4, 5, 6, 7, 8, 9,) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 274.79 Tm (11, 13, 15, 17, 19, 21, 23, 25,) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 259.56 Tm (28, 31, 34, 37, 40, 43, 46, 49,) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 244.32 Tm (53, 57, 61, 65, 69, 73, 77, 81,) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 229.09 Tm (86, 91, 96, 101, 106, 111, 116, 121,) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 213.85 Tm (127, 133, 139, 145, 151, 157, 163, 169,) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 198.61 Tm (176, 183, 190, 197, 204, 211, 218, 225,) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 183.38 Tm (233, 241, 249, 257, 265, 273, 281, 289,) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 168.14 Tm (298, 307, 316, 325, 334, 343, 352, 361.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 149.91 Tm (Minimum harmonic is 1. Maximum is 361. Cardinal membership including center is 37. Diagonal membership) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 137.67 Tm (including center is 37. Their intersection is center 1 only, so the union count is 37+37-1=73.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 125.43 Tm (Excluding center there are 36 cardinal and 36 diagonal harmonics.) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 98.20 Tm (B2. Ray distribution) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 74.96 Tm (Ray | Description | Count) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 64.76 Tm (\(0,-1\) | west      | 9) Tj ET
+endstream
+endobj
+8 0 obj
+<< /Length 6184 >>
+stream
+0.180 0.250 0.360 RG 0.12 w 47 800 m 548 800 l S
+0.250 0.300 0.380 rg BT /F2 7.50 Tf 1 0 0 1 52.00 808.00 Tm (SQ9 v0.2 Mathematical Audit) Tj ET
+0.350 0.350 0.350 rg BT /F1 7.50 Tf 1 0 0 1 490.00 28.00 Tm (Page 5) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 786.00 Tm (\(-1,-1\)| northwest | 9) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 775.80 Tm (\(-1,0\) | north     | 9) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 765.60 Tm (\(-1,1\) | northeast | 9) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 755.40 Tm (\(0,1\)  | east      | 9) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 745.20 Tm (\(1,1\)  | southeast | 9) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 735.00 Tm (\(1,0\)  | south     | 9) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 724.80 Tm (\(1,-1\) | southwest | 9) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 714.60 Tm (None    | center    | 1) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 697.40 Tm (The outside-center distribution is exactly uniform.) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 670.16 Tm (B3. Exact coordinate representation for every harmonic) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 646.92 Tm (For every ring k=1,...,9, the eight harmonics are:) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 628.69 Tm (Coordinate | Type | Ordinal) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 618.49 Tm (\(0,-k\)   | cardinal west      | 4k^2-3k+1) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 608.29 Tm (\(-k,-k\)  | diagonal northwest | 4k^2-2k+1) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 598.09 Tm (\(-k,0\)   | cardinal north     | 4k^2-1) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 587.89 Tm (\(-k,k\)   | diagonal northeast | 4k^2+1) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 577.69 Tm (\(0,k\)    | cardinal east      | 4k^2+2k-1) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 567.49 Tm (\(k,k\)    | diagonal southeast | 4k^2+2k+1) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 557.29 Tm (\(k,0\)    | cardinal south     | 4k^2+4k-1) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 547.09 Tm (\(k,-k\)   | diagonal southwest | \(2k+1\)^2) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 529.89 Tm (Together with center \(0,0\)->1, these formulas enumerate the coordinate, type, ray, and ordinal of) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 517.65 Tm (every harmonic.) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 490.42 Tm (B4. Spacing) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 467.18 Tm (The consecutive harmonic gaps are eight gaps of 1, eight gaps of 2, and so on through eight gaps of 9.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 454.94 Tm (Harmonic spacing is therefore nonuniform in ordinal space.) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 427.70 Tm (B5. Complete angular mappings: adverse direction -1) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 404.46 Tm (This is the direction used by every valid BUY and SELL plan.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 386.23 Tm (- Center 1: neither stop.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 372.99 Tm (- Ring-one ordinals 2,3,4,5: neither stop.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 359.76 Tm (- Ring-one ordinals 6,7,8,9: SL181 only.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 346.52 Tm (- Every harmonic on rings 2 through 9, ordinals 11 through 361: both stops.) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 330.28 Tm (EP1 | Coordinate | Ray | SL181 | SL361 | Support) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 320.08 Tm (1 | \(0,0\) | none | - | - | neither) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 309.88 Tm (2 | \(0,-1\) | west | - | - | neither) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 299.68 Tm (3 | \(-1,-1\) | northwest | - | - | neither) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 289.48 Tm (4 | \(-1,0\) | north | - | - | neither) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 279.28 Tm (5 | \(-1,1\) | northeast | - | - | neither) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 269.08 Tm (6 | \(0,1\) | east | 2 | - | 181 only) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 258.88 Tm (7 | \(1,1\) | southeast | 3 | - | 181 only) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 248.68 Tm (8 | \(1,0\) | south | 4 | - | 181 only) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 238.48 Tm (9 | \(1,-1\) | southwest | 5 | - | 181 only) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 221.28 Tm (For every ring k>=2, SL181 is the harmonic on the opposite ray of ring k-1, while SL361 is the) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 209.05 Tm (harmonic on the same ray of ring k-1. This compact rule determines both candidates for every remaining) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 196.81 Tm (harmonic.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 178.58 Tm (Examples:) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 160.34 Tm (EP1 | Coordinate | SL181 | SL361) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 150.14 Tm (11  | \(0,-2\)  | 6   | 2) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 139.94 Tm (13  | \(-2,-2\) | 7   | 3) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 129.74 Tm (15  | \(-2,0\)  | 8   | 4) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 119.54 Tm (17  | \(-2,2\)  | 9   | 5) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 109.34 Tm (19  | \(0,2\)   | 11  | 6) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 99.14 Tm (25  | \(2,-2\)  | 17  | 9) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 88.94 Tm (343 | \(9,9\)   | 307 | 273) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 78.74 Tm (352 | \(9,0\)   | 316 | 281) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 68.54 Tm (361 | \(9,-9\)  | 325 | 289) Tj ET
+endstream
+endobj
+9 0 obj
+<< /Length 5272 >>
+stream
+0.180 0.250 0.360 RG 0.12 w 47 800 m 548 800 l S
+0.250 0.300 0.380 rg BT /F2 7.50 Tf 1 0 0 1 52.00 808.00 Tm (SQ9 v0.2 Mathematical Audit) Tj ET
+0.350 0.350 0.350 rg BT /F1 7.50 Tf 1 0 0 1 490.00 28.00 Tm (Page 6) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 786.00 Tm (Exact support counts for adverse -1:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 767.76 Tm (Both: 64) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 752.53 Tm (SL181 only: 4) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 737.29 Tm (SL361 only: 0) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 722.06 Tm (Neither: 5) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 694.82 Tm (B6. Complete angular mappings: adverse direction +1) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 671.58 Tm (This direction cannot arise from the validated pivot/direction relationship, but was exhaustively) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 659.34 Tm (checked.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 641.11 Tm (- Rings 1 through 8: both stops, 64 harmonics.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 627.87 Tm (- Ring-9 west through northeast, ordinals 298,307,316,325: SL181 only.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 614.64 Tm (- Center and ring-9 east through southwest, ordinals 1,334,343,352,361: neither.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 601.40 Tm (- There are no SL361-only cases.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 585.16 Tm (Counts are again 64 both, 4 SL181-only, 0 SL361-only, and 5 neither. The count symmetry hides a) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 572.93 Tm (boundary reversal: unusable ordinals occur at the low end for adverse -1 and at the high end for) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 560.69 Tm (adverse +1.) Tj ET
+0.050 0.220 0.380 rg BT /F2 15.00 Tf 1 0 0 1 52.00 529.46 Tm (SECTION C - EP/TP/SL FEASIBILITY) Tj ET
+0.700 0.780 0.840 RG 0.7 w 52 504.70600000000013 m 543 504.70600000000013 l S
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 488.71 Tm (C1. BUY/SELL symmetry) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 465.47 Tm (BUY has Pivot<Close and Increment +a. SELL has Pivot>Close and Increment -a. Both yield x=1+D/a. Both) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 453.23 Tm (have entries n<x, targets n>x, RawTP coordinate y=x+v, and adverse ordinal sign -1. Therefore BUY and) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 440.99 Tm (SELL feasibility is identical in normalized ordinal space. Dollar prices are reflections about the) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 428.76 Tm (relevant Pivot.) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 401.52 Tm (C2. Entry and stop intervals) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 378.28 Tm (Normalized u | Entry result | Stop result) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 368.08 Tm (0<u<=1 | EP1 only | rejected before stops) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 357.88 Tm (1<u<=5 | EP1/EP2; EP1 in 2..5 | neither stop) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 347.68 Tm (5<u<=10 | EP1/EP2; EP1 in 6..9 | SL181 only) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 337.48 Tm (u>10 | EP1/EP2; EP1 at least 11 | both stops, subject to target boundary) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 320.28 Tm (At u=10, x=11 and strict entry comparison excludes harmonic 11. EP1 remains 9, so SL361 remains) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 308.05 Tm (unavailable. The condition is u>10, never u>=10.) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 280.81 Tm (C3. Target feasibility) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 257.57 Tm (At least one target and TP1 exist exactly when x<361, equivalently u<360.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 239.33 Tm (TP2 exists unless TP1 is 361. For TP1 not to be 361, ordinal 352 must be eligible, requiring u<351,) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 227.10 Tm (and RawTP coordinate must not exceed the midpoint between 352 and 361:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 208.86 Tm (y <= \(352+361\)/2 = 356.5.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 190.63 Tm (Since y=1+u+v, this is u+v<=355.5. Equality selects 352 because the secondary tie-breaker favors the) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 178.39 Tm (candidate closer to Close.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 160.15 Tm (Therefore TP2 exists exactly when u<351 and u+v<=355.5.) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 132.92 Tm (C4. Combined plan feasibility) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 109.68 Tm (Legacy-accepted plan requires EP1, EP2, TP1, SL181, and SL361; TP2 may be absent. Exact condition:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 91.44 Tm (10 < u < 360.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 73.21 Tm (Full six-level plan requires EP1, EP2, TP1, TP2, SL181, and SL361. Exact conditions:) Tj ET
+endstream
+endobj
+10 0 obj
+<< /Length 6252 >>
+stream
+0.180 0.250 0.360 RG 0.12 w 47 800 m 548 800 l S
+0.250 0.300 0.380 rg BT /F2 7.50 Tf 1 0 0 1 52.00 808.00 Tm (SQ9 v0.2 Mathematical Audit) Tj ET
+0.350 0.350 0.350 rg BT /F1 7.50 Tf 1 0 0 1 490.00 28.00 Tm (Page 7) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 786.00 Tm (10 < u < 351 and u+v <= 355.5.) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 758.76 Tm (C5. Permanently unusable EP1 ordinals) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 735.52 Tm (For actual adverse sign -1, EP1 ordinals 1 through 9 are permanently unusable for a complete stop) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 723.29 Tm (pair. Ordinal 1 has no ray; 2 through 5 have neither candidate; 6 through 9 have only SL181. Every) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 711.05 Tm (harmonic from 11 through 361 supports both stops.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 692.82 Tm (Ordinal 361 is stop-capable, but an EP1 at 361 implies Close beyond it, leaving no profit-side TP1. It) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 680.58 Tm (is not complete-plan-capable within the finite grid.) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 653.34 Tm (C6. Exhaustive failure taxonomy) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 630.10 Tm (Failure | Classification | Exact condition) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 619.90 Tm (Invalid BUY pivot | input-dependent | Pivot >= Close) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 609.70 Tm (Invalid SELL pivot | input-dependent | Pivot <= Close) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 599.50 Tm (Non-positive Norm | input-dependent | N <= 0) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 589.30 Tm (Fewer than two entries | input/scale-dependent | u <= 1) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 579.10 Tm (EP1 has neither stop | ordinal/boundary-dependent | EP1 in 1..5) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 568.90 Tm (EP1 has SL181 only | ordinal/boundary-dependent | EP1 in 6..9) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 558.70 Tm (SL361 only | impossible in enumerated geometry | no ordinal) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 548.50 Tm (Complete stop pair | ordinal-dependent | harmonic EP1 >= 11) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 538.30 Tm (No TP1 | grid-boundary-dependent | u >= 360) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 528.10 Tm (TP2 absent but accepted | grid/RawTP-dependent | TP1=361) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 517.90 Tm (Full plan unavailable | scale/Norm/boundary-dependent | u>=351 or u+v>355.5) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 507.70 Tm (Negative generated price | scale/input-dependent | not rejected by source) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 497.50 Tm (Unsupported degree treated as 361-style | implementation defect | degrees != 181) Tj ET
+0.050 0.220 0.380 rg BT /F2 15.00 Tf 1 0 0 1 52.00 467.30 Tm (SECTION D - NORMALIZED PRICE-SPACE ANALYSIS) Tj ET
+0.700 0.780 0.840 RG 0.7 w 52 442.5539999999996 m 543 442.5539999999996 l S
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 435.55 Tm (Define D=abs\(Close-Pivot\)>0, N=DailyNorm>0, and a=abs\(Increment\)>0. Then u=D/a and v=N/a. Close has) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 423.32 Tm (normalized coordinate x=1+u. RawTP has normalized coordinate y=1+u+v=1+\(D+N\)/a.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 405.08 Tm (These dimensionless values completely determine ordinal selection. Dollar prices are recovered by) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 392.85 Tm (Pivot+\(n-1\)a for BUY and Pivot-\(n-1\)a for SELL.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 374.61 Tm (The ratio D/N=u/v is determined by the inputs. It determines only the ratio between u and v, not their) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 362.37 Tm (absolute normalized values. One continuous scale degree of freedom remains.) Tj ET
+0.050 0.220 0.380 rg BT /F2 15.00 Tf 1 0 0 1 52.00 331.14 Tm (SECTION E - SCALE IDENTIFIABILITY) Tj ET
+0.700 0.780 0.840 RG 0.7 w 52 306.38799999999964 m 543 306.38799999999964 l S
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 290.39 Tm (E1. Proof of non-identifiability) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 267.15 Tm (For every a>0 define P_a\(n\)=Pivot+s\(n-1\)a, where s=+1 for BUY and -1 for SELL. Every such map) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 254.91 Tm (preserves the 19x19 ordinal spiral, harmonic membership, ray membership, ordinal ordering, and the) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 242.68 Tm (functional form of the entry, target, and square-root stop methods.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 224.44 Tm (Different a nevertheless produce different u=D/a and v=N/a and can therefore select different ordinals) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 212.20 Tm (and prices. The transformation a -> lambda*a for any lambda>0 is an unconstrained continuous degree of) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 199.97 Tm (freedom. No equation in the supplied algorithm establishes a=f\(D,N\).) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 181.73 Tm (Dimensional validity does not create uniqueness. Each of a=N, a=D, a=sqrt\(DN\), and a=D/11 has price) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 169.50 Tm (units, but none follows uniquely from units alone. The scale is therefore not identifiable from Pivot,) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 157.26 Tm (Close, Norm, and Direction. Infinitely many positive affine scales preserve the same underlying SQ9) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 145.02 Tm (geometry.) Tj ET
+0.050 0.220 0.380 rg BT /F2 15.00 Tf 1 0 0 1 52.00 113.79 Tm (SECTION F - FEASIBLE SCALE INTERVALS) Tj ET
+0.700 0.780 0.840 RG 0.7 w 52 89.03799999999973 m 543 89.03799999999973 l S
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 73.04 Tm (F1. Legacy interval) Tj ET
+endstream
+endobj
+11 0 obj
+<< /Length 5716 >>
+stream
+0.180 0.250 0.360 RG 0.12 w 47 800 m 548 800 l S
+0.250 0.300 0.380 rg BT /F2 7.50 Tf 1 0 0 1 52.00 808.00 Tm (SQ9 v0.2 Mathematical Audit) Tj ET
+0.350 0.350 0.350 rg BT /F1 7.50 Tf 1 0 0 1 490.00 28.00 Tm (Page 8) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 786.00 Tm (From 10 < D/a < 360 with D,a>0:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 767.76 Tm (D/360 < a < D/10.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 749.53 Tm (For every valid D>0 this is a nonempty continuous interval. It never selects an isolated scale.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 737.29 Tm (Feasibility alone cannot identify correctness or predictive value.) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 710.06 Tm (F2. Full six-level interval) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 686.82 Tm (The conditions 10<u<351 and u+v<=355.5 become:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 668.58 Tm (a < D/10,) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 653.34 Tm (a > D/351,) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 638.11 Tm (a >= \(D+N\)/355.5.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 619.87 Tm (Thus the full scale domain is the intersection of the open interval \(D/351,D/10\) with the closed lower) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 607.64 Tm (condition [\(D+N\)/355.5,infinity\).) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 589.40 Tm (A full-plan scale exists exactly when \(D+N\)/355.5 < D/10, which reduces to N/D < 34.55. At equality) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 577.16 Tm (the apparent scale is a=D/10, but that boundary is excluded because u=10 leaves EP1 at 9. Therefore) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 564.93 Tm (equality is not feasible.) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 537.69 Tm (F3. Possible outcomes) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 514.45 Tm (- Legacy feasibility: always a continuous nonempty interval for valid D; never a unique scale.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 501.22 Tm (- Full-plan feasibility: a continuous interval when N/D<34.55; no feasible scale when N/D>=34.55;) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 488.98 Tm (never a uniquely selected scale.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 475.74 Tm (- Isolated feasible scales do not arise from the original inequalities.) Tj ET
+0.050 0.220 0.380 rg BT /F2 15.00 Tf 1 0 0 1 52.00 446.51 Tm (SECTION G - CANDIDATE COMPARISON) Tj ET
+0.700 0.780 0.840 RG 0.7 w 52 421.75800000000015 m 543 421.75800000000015 l S
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 405.76 Tm (Candidate 0: original magnitude a=1) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 382.52 Tm (Strengths: exact v0.2 output parity; simplest port; no alteration to current price semantics.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 370.28 Tm (Weaknesses: u=D directly, making feasibility depend on absolute dollar distance; tight low-price) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 358.05 Tm (examples fail; wide distances reach the finite target boundary; one dollar is not part of grid) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 345.81 Tm (geometry; the method is not cross-price invariant.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 327.57 Tm (Verdict: retain only as an explicitly named Legacy $1 Unit mode.) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 300.34 Tm (Candidate 1: Daily Norm unit a=N) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 277.10 Tm (Then v=1 and u=D/N. This is dimensionally valid and preserves geometry, but adds the semantic) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 264.86 Tm (assumption that one ordinal step equals one Daily Norm. That assumption is not present in the source.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 252.63 Tm (A legacy plan would require 10<D/N<360, so Pivot-to-Close distance must exceed ten Norms. Requested) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 240.39 Tm (tests fail for low, medium, and high examples. The wide case succeeds but produces extremely distant) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 228.15 Tm (dollar stops.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 209.92 Tm (Verdict: do not use as default. The absence of a new numerical constant does not make the semantic) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 197.68 Tm (assumption uniquely justified.) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 170.45 Tm (Candidate 2: explicit close-coordinate calibration) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 147.21 Tm (Choose a fixed normalized displacement u0 and set a=D/u0, imposing x=1+u0.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 128.97 Tm (Recommended deterministic convention when no extra field is allowed: u0=11, hence a=D/11. This places) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 116.73 Tm (Close at x=12 and gives EP1=11, EP2=9, SL181=6, and SL361=2.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 98.50 Tm (Why 11 is the narrowest operational choice: EP1 11 is the first harmonic supporting both stops; strict) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 86.26 Tm (eligibility requires x>11; x=12 is the next integer coordinate; therefore u0=11. It is the coarsest) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 74.03 Tm (scale in this simple integer-coordinate class that supplies both stops.) Tj ET
+endstream
+endobj
+12 0 obj
+<< /Length 5686 >>
+stream
+0.180 0.250 0.360 RG 0.12 w 47 800 m 548 800 l S
+0.250 0.300 0.380 rg BT /F2 7.50 Tf 1 0 0 1 52.00 808.00 Tm (SQ9 v0.2 Mathematical Audit) Tj ET
+0.350 0.350 0.350 rg BT /F1 7.50 Tf 1 0 0 1 490.00 28.00 Tm (Page 9) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 786.00 Tm (Trade-offs: it standardizes entry geometry across stocks; does not establish predictive meaning; can) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 773.76 Tm (produce large dollar stops when D is wide; may produce non-positive levels; and changes output parity.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 761.53 Tm (It is an operational calibration, not a mathematical discovery.) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 734.29 Tm (Market-defined quotation increment) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 711.05 Tm (A valid quotation increment is relevant to final validation and display but generally too small to) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 698.82 Tm (solve finite grid coverage. At a one-cent scale, D=$5 produces u=500 and no target. A universal) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 686.58 Tm (one-cent assumption is also inappropriate across every US-listed security and venue context.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 668.34 Tm (Verdict: use a known instrument increment for validation and presentation, not automatically as the) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 656.11 Tm (SQ9 affine scale.) Tj ET
+0.050 0.220 0.380 rg BT /F2 15.00 Tf 1 0 0 1 52.00 624.87 Tm (SECTION H - EXECUTED NUMERICAL TESTS) Tj ET
+0.700 0.780 0.840 RG 0.7 w 52 600.1220000000001 m 543 600.1220000000001 l S
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 593.12 Tm (SELL equivalents retain the requested Close and Norm and reflect the same D above Close.) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 574.89 Tm (Case | BUY Pivot | Close | SELL Pivot | Norm) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 564.69 Tm (Low | 24.50 | 24.80 | 25.10 | 0.60) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 554.49 Tm (Medium | 175.00 | 180.00 | 185.00 | 4.00) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 544.29 Tm (High | 950.00 | 970.00 | 990.00 | 15.00) Tj ET
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 534.09 Tm (Wide | 40.00 | 390.00 | 740.00 | 20.00) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 516.89 Tm (Distances below are absolute dollar distances from EP1.) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 489.65 Tm (H1. Original fixed scale a=1) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 466.41 Tm (Low BUY and SELL fail because u=0.3 supplies fewer than two entries.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 451.17 Tm (Medium BUY and SELL reach EP1=5 and fail both stops.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 435.94 Tm (High BUY and SELL succeed fully.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 420.70 Tm (Wide BUY and SELL are accepted legacy plans with TP2 unavailable.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 402.47 Tm (High BUY:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 387.23 Tm (Scale 1; Start 950; Increment +1; EP1 n19 $968; EP2 n17 $966; RawTP $985; TP1 n37 $986; TP2 n40 $989;) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 374.99 Tm (SL181 n11 $960; SL361 n6 $955; EP1-to-TP1 $18; EP1-to-SL181 $8; EP1-to-SL361 $13.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 356.76 Tm (High SELL:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 341.52 Tm (Scale 1; Start 990; Increment -1; EP1 n19 $972; EP2 n17 $974; RawTP $955; TP1 n37 $954; TP2 n40 $951;) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 329.29 Tm (SL181 n11 $980; SL361 n6 $985; distances $18, $8, and $13.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 311.05 Tm (Wide BUY:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 295.81 Tm (Scale 1; Start 40; Increment +1; EP1 n343 $382; EP2 n334 $373; RawTP $410; TP1 n361 $400; TP2) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 283.58 Tm (unavailable; SL181 n307 $346; SL361 n273 $312; distances $18, $36, and $70. calculate_plan accepts) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 271.34 Tm (this plan.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 253.11 Tm (Wide SELL:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 237.87 Tm (Scale 1; Start 740; Increment -1; EP1 n343 $398; EP2 n334 $407; RawTP $370; TP1 n361 $380; TP2) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 225.63 Tm (unavailable; SL181 n307 $434; SL361 n273 $468; distances $18, $36, and $70. calculate_plan accepts) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 213.40 Tm (this plan.) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 186.16 Tm (H2. Daily Norm scale a=N) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 162.92 Tm (Low BUY and SELL fail entry selection. Medium and High BUY and SELL select EP1=2 and fail stops. Only) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 150.69 Tm (Wide succeeds.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 132.45 Tm (Wide BUY:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 117.21 Tm (Scale 20; Start 40; Increment +20; EP1 n17 $360; EP2 n15 $320; RawTP $410; TP1 n19 $400; TP2 n21 $440;) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 104.98 Tm (SL181 n9 $200; SL361 n5 $120; distances $40, $160, and $240.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 86.74 Tm (Wide SELL:) Tj ET
+endstream
+endobj
+13 0 obj
+<< /Length 6201 >>
+stream
+0.180 0.250 0.360 RG 0.12 w 47 800 m 548 800 l S
+0.250 0.300 0.380 rg BT /F2 7.50 Tf 1 0 0 1 52.00 808.00 Tm (SQ9 v0.2 Mathematical Audit) Tj ET
+0.350 0.350 0.350 rg BT /F1 7.50 Tf 1 0 0 1 490.00 28.00 Tm (Page 10) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 786.00 Tm (Scale 20; Start 740; Increment -20; EP1 n17 $420; EP2 n15 $460; RawTP $370; TP1 n19 $380; TP2 n21) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 773.76 Tm ($340; SL181 n9 $580; SL361 n5 $660; distances $40, $160, and $240.) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 746.53 Tm (H3. Explicit calibration a=D/11) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 723.29 Tm (Low BUY:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 708.05 Tm (Scale 0.0272727273; Start 24.50; Increment +0.0272727273; EP1 n11 $24.77272727; EP2 n9 $24.71818182;) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 695.82 Tm (RawTP $25.40; TP1 n34 $25.40; TP2 n37 $25.48181818; SL181 n6 $24.63636364; SL361 n2 $24.52727273;) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 683.58 Tm (distances $0.62727273, $0.13636364, and $0.24545455.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 665.34 Tm (Low SELL:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 650.11 Tm (Scale 0.0272727273; Start 25.10; Increment -0.0272727273; EP1 n11 $24.82727273; EP2 n9 $24.88181818;) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 637.87 Tm (RawTP $24.20; TP1 n34 $24.20; TP2 n37 $24.11818182; SL181 n6 $24.96363636; SL361 n2 $25.07272727; same) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 625.64 Tm (distances as BUY.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 607.40 Tm (Medium BUY:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 592.16 Tm (Scale 0.4545454545; Start 175; Increment +0.4545454545; EP1 n11 $179.54545455; EP2 n9 $178.63636364;) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 579.93 Tm (RawTP $184; TP1 n21 $184.09090909; TP2 n23 $185; SL181 n6 $177.27272727; SL361 n2 $175.45454545;) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 567.69 Tm (distances $4.54545455, $2.27272727, and $4.09090909.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 549.46 Tm (Medium SELL:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 534.22 Tm (Scale 0.4545454545; Start 185; Increment -0.4545454545; EP1 n11 $180.45454545; EP2 n9 $181.36363636;) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 521.98 Tm (RawTP $176; TP1 n21 $175.90909091; TP2 n23 $175; SL181 n6 $182.72727273; SL361 n2 $184.54545455; same) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 509.75 Tm (distances as BUY.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 491.51 Tm (High BUY:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 476.28 Tm (Scale 1.8181818182; Start 950; Increment +1.8181818182; EP1 n11 $968.18181818; EP2 n9 $964.54545455;) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 464.04 Tm (RawTP $985; TP1 n21 $986.36363636; TP2 n23 $990; SL181 n6 $959.09090909; SL361 n2 $951.81818182;) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 451.80 Tm (distances $18.18181818, $9.09090909, and $16.36363636.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 433.57 Tm (High SELL:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 418.33 Tm (Scale 1.8181818182; Start 990; Increment -1.8181818182; EP1 n11 $971.81818182; EP2 n9 $975.45454545;) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 406.10 Tm (RawTP $955; TP1 n21 $953.63636364; TP2 n23 $950; SL181 n6 $980.90909091; SL361 n2 $988.18181818; same) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 393.86 Tm (distances as BUY.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 375.62 Tm (Wide BUY:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 360.39 Tm (Scale 31.8181818182; Start 40; Increment +31.8181818182; EP1 n11 $358.18181818; EP2 n9 $294.54545455;) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 348.15 Tm (RawTP $410; TP1 n13 $421.81818182; TP2 n15 $485.45454545; SL181 n6 $199.09090909; SL361 n2) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 335.92 Tm ($71.81818182; distances $63.63636364, $159.09090909, and $286.36363636.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 317.68 Tm (Wide SELL:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 302.44 Tm (Scale 31.8181818182; Start 740; Increment -31.8181818182; EP1 n11 $421.81818182; EP2 n9 $485.45454545;) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 290.21 Tm (RawTP $370; TP1 n13 $358.18181818; TP2 n15 $294.54545455; SL181 n6 $580.90909091; SL361 n2) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 277.97 Tm ($708.18181818; same distances as BUY.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 259.74 Tm (The wide case demonstrates that normalized feasibility does not imply practically attractive dollar) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 247.50 Tm (stops.) Tj ET
+0.050 0.220 0.380 rg BT /F2 15.00 Tf 1 0 0 1 52.00 216.26 Tm (SECTION I - US STOCKS RECOMMENDATION) Tj ET
+0.700 0.780 0.840 RG 0.7 w 52 191.51400000000035 m 543 191.51400000000035 l S
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 175.51 Tm (I1. Operational decision path) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 152.27 Tm (Preferred design if one additional manual field is acceptable:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 134.04 Tm (1. Add a positive manual SQ9 Scale input a.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 120.80 Tm (2. Validate Pivot, Close, Direction, and Norm exactly as v0.2.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 107.57 Tm (3. Assign BUY Increment +a and SELL Increment -a.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 94.33 Tm (4. Calculate u=D/a and v=N/a.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 81.09 Tm (5. Disclose whether it satisfies legacy 10<u<360 and full-plan 10<u<351 with u+v<=355.5.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 67.86 Tm (6. Execute the original EP/TP/SL algorithms without fallback.) Tj ET
+endstream
+endobj
+14 0 obj
+<< /Length 6450 >>
+stream
+0.180 0.250 0.360 RG 0.12 w 47 800 m 548 800 l S
+0.250 0.300 0.380 rg BT /F2 7.50 Tf 1 0 0 1 52.00 808.00 Tm (SQ9 v0.2 Mathematical Audit) Tj ET
+0.350 0.350 0.350 rg BT /F1 7.50 Tf 1 0 0 1 490.00 28.00 Tm (Page 11) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 786.00 Tm (7. Display the supplied scale and its calibration basis with the plan.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 769.76 Tm (This is the most transparent solution because it exposes, rather than conceals, the missing scale) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 757.53 Tm (degree of freedom.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 739.29 Tm (If the specified input form cannot add a scale field, use a=D/11 and label the mode: Normalized) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 727.06 Tm (close-coordinate calibration; Close x=12; EP1 anchored to first complete-stop harmonic n=11.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 708.82 Tm (This recommendation is not uniquely true, predictive, or historically optimized. It is deterministic,) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 696.58 Tm (affine, direction-symmetric, independent of absolute price, compatible with the existing ordinal) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 684.35 Tm (rules, and based on the first harmonic carrying both mandated angular stops.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 666.11 Tm (Retain a=1 as a separately named Legacy $1 Unit mode for reproducibility and output-parity checks.) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 638.88 Tm (I2. Algorithm preservation versus output parity) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 615.64 Tm (Changing a preserves the canonical spiral, ordinal coordinates, harmonic membership, rays, entry) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 603.40 Tm (ordering, target minimization, RawTP construction, angular stop method, and failure logic. It does not) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 591.16 Tm (preserve Close coordinate, selected EP/TP ordinals, dollar outputs, or success/failure for a specific) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 578.93 Tm (input. This is algorithm preservation without output parity.) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 551.69 Tm (I3. Practical safeguards) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 528.45 Tm (The calibration can generate stops below zero for BUY or implausibly high SELL stops when) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 516.22 Tm (Pivot-to-Close distance is wide. The source does not reject them. A future calculator should identify) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 503.98 Tm (non-positive equity prices as invalid market outputs. That is domain validation, not a new price-level) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 491.74 Tm (formula.) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 464.51 Tm (I4. Ten-day holding period) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 441.27 Tm (The ten-trading-day limit has no mathematical role in the supplied price mapping. The engine contains) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 429.03 Tm (no time coordinate, bar count, or date-dependent scale. It must remain separate as plan metadata or a) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 416.80 Tm (manual expiry instruction. No time-based SQ9 scaling can be derived from this source.) Tj ET
+0.050 0.220 0.380 rg BT /F2 15.00 Tf 1 0 0 1 52.00 385.56 Tm (SECTION J - MINIMUM PHP PORT REQUIREMENTS) Tj ET
+0.700 0.780 0.840 RG 0.7 w 52 360.8100000000002 m 543 360.8100000000002 l S
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 353.81 Tm (No PHP implementation is supplied. The minimum mathematical specification is:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 335.57 Tm (1. Reproduce the exact 19x19 orientation and ordinal map.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 322.34 Tm (2. Preserve all 73 harmonics.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 309.10 Tm (3. Preserve strict less-than and greater-than comparisons.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 295.87 Tm (4. Preserve TP1 tuple ordering: RawTP distance, then Close distance.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 282.63 Tm (5. Preserve nullable TP2 and the legacy accepted behavior.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 269.39 Tm (6. Restrict internal angular calls to exactly 181 or 361.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 256.16 Tm (7. Preserve 181 as opposite ray/root delta 1 and 361 as same ray/root delta 2.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 242.92 Tm (8. Preserve nearest available ray-candidate selection.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 229.69 Tm (9. Do not round before ordinal selection or tie-breaking.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 216.45 Tm (10. Separate internal calculation precision, quotation-increment validation, and display formatting.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 200.21 Tm (For financial precision, parse user prices as decimal strings and retain sufficient internal) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 187.98 Tm (precision. Compute roots at higher working precision. Apply deterministic tie behavior equivalent to) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 175.74 Tm (Python tuple ordering. Round only final display values. Validate displayed or executable prices) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 163.51 Tm (against a known instrument quotation increment when supplied. Do not assume a universal one-cent) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 151.27 Tm (increment.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 133.03 Tm (The Python close_n tolerance of 1e-8 affects only reported close_n, not EP/TP/SL selection. A PHP port) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 120.80 Tm (must not let display rounding change strict eligibility.) Tj ET
+0.050 0.220 0.380 rg BT /F2 15.00 Tf 1 0 0 1 52.00 89.56 Tm (SECTION K - FINAL THREE-GATE VERDICT) Tj ET
+0.700 0.780 0.840 RG 0.7 w 52 64.81200000000032 m 543 64.81200000000032 l S
+endstream
+endobj
+15 0 obj
+<< /Length 6786 >>
+stream
+0.180 0.250 0.360 RG 0.12 w 47 800 m 548 800 l S
+0.250 0.300 0.380 rg BT /F2 7.50 Tf 1 0 0 1 52.00 808.00 Tm (SQ9 v0.2 Mathematical Audit) Tj ET
+0.350 0.350 0.350 rg BT /F1 7.50 Tf 1 0 0 1 490.00 28.00 Tm (Page 12) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 777.00 Tm (GATE 1: Was the actual Python v0.2 calculation engine audited?) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 753.76 Tm (PASS.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 735.52 Tm (Evidence: exact spiral construction was executed; all 361 cells and ordinals were verified; all 73) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 723.29 Tm (harmonics were enumerated; strict entries, targets, tie-breaking, ray selection, adverse sign, angular) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 711.05 Tm (stops, and nullable TP2 behavior were analyzed directly. Unsupported-degree behavior was identified) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 698.82 Tm (from the supplied conditional.) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 671.58 Tm (GATE 2: Were EP/TP/SL mathematical limitations comprehensively mapped?) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 648.34 Tm (PASS.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 630.10 Tm (Evidence: every harmonic was classified through exact ring formulas; both adverse signs were) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 617.87 Tm (exhaustively evaluated; stop counts are 64 both, 4 SL181 only, 0 SL361 only, and 5 neither; strict) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 605.63 Tm (entry, target, stop-pair, legacy, and full-plan regions were derived; BUY/SELL symmetry was proven;) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 593.40 Tm (requested numerical cases and alternative mappings were executed.) Tj ET
+0.080 0.340 0.500 rg BT /F2 11.20 Tf 1 0 0 1 52.00 566.16 Tm (GATE 3: Was the US equities price mapping resolved to a mathematically justified conclusion and actionable recommendation?) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 542.92 Tm (PASS.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 524.68 Tm (Evidence: non-identifiability was proven as a continuous affine degree of freedom; exact feasible) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 512.45 Tm (scale intervals were derived; original, Norm-unit, quotation-tick, and affine-calibration candidates) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 500.21 Tm (were compared; the unavoidable external assumption was identified; a deterministic a=D/11 default and) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 487.98 Tm (a preferred user-supplied scale path were provided without predictive claims.) Tj ET
+0.050 0.220 0.380 rg BT /F2 15.00 Tf 1 0 0 1 52.00 456.74 Tm (FINAL DECISION TABLE) Tj ET
+0.700 0.780 0.840 RG 0.7 w 52 431.9900000000001 m 543 431.9900000000001 l S
+0.120 0.150 0.190 rg BT /F3 7.60 Tf 1 0 0 1 60.00 424.99 Tm (QUESTION | ANSWER | EVIDENCE) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 410.79 Tm (1. Is increment +/-1 part of SQ9 geometry? | No. Sign supplies price direction and magnitude 1) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 398.55 Tm (supplies an affine price unit. | Spiral and harmonics are constructed before price mapping.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 385.32 Tm (2. Does changing increment preserve the original 19x19 harmonic structure? | Yes, under a single) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 373.08 Tm (nonzero affine increment. It can change selected ordinals and outputs. | Harmonics depend only on) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 360.85 Tm (coordinates; levels are assigned afterward.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 347.61 Tm (3. Which EP1 ordinals support both angular stops? | All 64 harmonic ordinals from 11 through 361) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 335.37 Tm (under validated adverse sign -1. | Exhaustive enumeration; 1-5 support neither and 6-9 only SL181.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 322.14 Tm (4. What is the minimum normalized displacement required for a legacy-accepted trading plan? |) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 309.90 Tm (Strictly u>10, plus u<360. Ten is an infimum, not an attained minimum. | At u=10 strict entry) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 297.67 Tm (comparison excludes ordinal 11 and leaves EP1=9 without SL361.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 284.43 Tm (5. Does feasibility differ between BUY and SELL? | No under validated pivot relationships. | Both) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 272.19 Tm (yield x=1+D/a, target n>x, and adverse sign -1.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 258.96 Tm (6. Can a unique equity increment be derived from existing inputs alone? | No. | Any a>0 is an affine) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 246.72 Tm (embedding; D/N fixes only u/v.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 233.49 Tm (7. Can feasible increment intervals be calculated? | Yes. Legacy D/360<a<D/10. Full: a>D/351,) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 221.25 Tm (a>=\(D+N\)/355.5, and a<D/10. | Direct algebra from normalized feasibility.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 208.01 Tm (8. What explicit assumption is required to select one increment? | A scale-calibration condition,) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 195.78 Tm (either supplied manually or fixed as policy. | Feasibility produces an interval, not one point.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 182.54 Tm (9. What is the recommended equity price mapping? | Prefer a documented user-supplied a. Without a) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 170.31 Tm (new field, use a=D/11; retain a=1 as Legacy mode. | D/11 makes x=12 and EP1=11, the first) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 158.07 Tm (complete-stop harmonic.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 144.83 Tm (10. What is the minimum mathematical modification for PHP/HTML? | Parameterize magnitude instead of) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 132.60 Tm (forcing 1 while preserving all ordinal selection rules; add decimal-safe calculation, degree) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 120.36 Tm (validation, nullable TP2, and scale disclosure. | Scale is the only unresolved mathematical degree) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 108.13 Tm (of freedom.) Tj ET
+endstream
+endobj
+16 0 obj
+<< /Length 3658 >>
+stream
+0.180 0.250 0.360 RG 0.12 w 47 800 m 548 800 l S
+0.250 0.300 0.380 rg BT /F2 7.50 Tf 1 0 0 1 52.00 808.00 Tm (SQ9 v0.2 Mathematical Audit) Tj ET
+0.350 0.350 0.350 rg BT /F1 7.50 Tf 1 0 0 1 490.00 28.00 Tm (Page 13) Tj ET
+0.050 0.220 0.380 rg BT /F2 15.00 Tf 1 0 0 1 52.00 773.00 Tm (RESEARCH DISCIPLINE AND LIMITATIONS) Tj ET
+0.700 0.780 0.840 RG 0.7 w 52 748.25 m 543 748.25 l S
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 741.25 Tm (This assessment separates four concepts:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 723.01 Tm (1. Mathematical validity: the grid, mappings, inequalities, and candidate rules are internally) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 710.78 Tm (defined and auditable.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 697.54 Tm (2. Algorithmic feasibility: exact normalized domains show when the code can produce its required) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 685.31 Tm (fields.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 672.07 Tm (3. Practical usability: generated prices can still be too distant, non-positive, or inconsistent) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 659.83 Tm (with an instrument's quotation increment.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 646.60 Tm (4. Empirical edge: no conclusion about profitability, hit rate, or predictive value follows from) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 62.00 634.36 Tm (mathematical feasibility.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 618.13 Tm (No scale was selected by maximizing apparent profit, risk/reward, or historical performance. No grid) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 605.89 Tm (expansion, fallback target, alternative indicator, machine-learning model, volatility rule, or trading) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 593.65 Tm (rule has been introduced.) Tj ET
+0.050 0.220 0.380 rg BT /F2 15.00 Tf 1 0 0 1 52.00 562.42 Tm (VERIFICATION RECORD) Tj ET
+0.700 0.780 0.840 RG 0.7 w 52 537.6680000000001 m 543 537.6680000000001 l S
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 530.67 Tm (The following checks were executed in temporary standalone Python sessions:) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 512.43 Tm (PASS: exact 19x19 build; 361 unique coordinates and ordinals; range 1..361.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 497.20 Tm (PASS: documented 3/4/5, 2/1/6, 9/8/7 orientation.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 481.96 Tm (PASS: 73 harmonics; 37 cardinal-inclusive-center; 37 diagonal-inclusive-center; intersection center) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 469.72 Tm (only.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 454.49 Tm (PASS: nine harmonics per noncentral ray.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 439.25 Tm (PASS: harmonic gap distribution of eight each for gaps 1 through 9.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 424.02 Tm (PASS: exhaustive SL181 and SL361 evaluation for every harmonic and both adverse directions.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 408.78 Tm (PASS: requested low, medium, high, and wide BUY and SELL examples at a=1.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 393.54 Tm (PASS: the same examples at a=Norm and a=D/11.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 378.31 Tm (PASS: algebraic interval results cross-checked against the exact source behavior.) Tj ET
+0.100 0.130 0.180 rg BT /F1 9.20 Tf 1 0 0 1 52.00 360.07 Tm (End of report.) Tj ET
+endstream
+endobj
+17 0 obj
+<< /Type /Pages /Kids [18 0 R 19 0 R 20 0 R 21 0 R 22 0 R 23 0 R 24 0 R 25 0 R 26 0 R 27 0 R 28 0 R 29 0 R 30 0 R] /Count 13 >>
+endobj
+18 0 obj
+<< /Type /Page /Parent 17 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R /F3 3 0 R >> >> /Contents 4 0 R >>
+endobj
+19 0 obj
+<< /Type /Page /Parent 17 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R /F3 3 0 R >> >> /Contents 5 0 R >>
+endobj
+20 0 obj
+<< /Type /Page /Parent 17 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R /F3 3 0 R >> >> /Contents 6 0 R >>
+endobj
+21 0 obj
+<< /Type /Page /Parent 17 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R /F3 3 0 R >> >> /Contents 7 0 R >>
+endobj
+22 0 obj
+<< /Type /Page /Parent 17 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R /F3 3 0 R >> >> /Contents 8 0 R >>
+endobj
+23 0 obj
+<< /Type /Page /Parent 17 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R /F3 3 0 R >> >> /Contents 9 0 R >>
+endobj
+24 0 obj
+<< /Type /Page /Parent 17 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R /F3 3 0 R >> >> /Contents 10 0 R >>
+endobj
+25 0 obj
+<< /Type /Page /Parent 17 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R /F3 3 0 R >> >> /Contents 11 0 R >>
+endobj
+26 0 obj
+<< /Type /Page /Parent 17 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R /F3 3 0 R >> >> /Contents 12 0 R >>
+endobj
+27 0 obj
+<< /Type /Page /Parent 17 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R /F3 3 0 R >> >> /Contents 13 0 R >>
+endobj
+28 0 obj
+<< /Type /Page /Parent 17 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R /F3 3 0 R >> >> /Contents 14 0 R >>
+endobj
+29 0 obj
+<< /Type /Page /Parent 17 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R /F3 3 0 R >> >> /Contents 15 0 R >>
+endobj
+30 0 obj
+<< /Type /Page /Parent 17 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R /F3 3 0 R >> >> /Contents 16 0 R >>
+endobj
+31 0 obj
+<< /Title (SQ9 Auto Plan Compiler v0.2 - Mathematical Audit and US Equities Resolution) /Author (OpenAI) /Subject (Mathematical audit and price-mapping assessment) /Creator (Dependency-free PDF exporter) >>
+endobj
+32 0 obj
+<< /Type /Catalog /Pages 17 0 R >>
+endobj
+xref
+0 33
+0000000000 65535 f 
+0000000015 00000 n 
+0000000085 00000 n 
+0000000160 00000 n 
+0000000228 00000 n 
+0000005175 00000 n 
+0000010392 00000 n 
+0000016542 00000 n 
+0000022960 00000 n 
+0000029196 00000 n 
+0000034520 00000 n 
+0000040825 00000 n 
+0000046594 00000 n 
+0000052333 00000 n 
+0000058587 00000 n 
+0000065090 00000 n 
+0000071929 00000 n 
+0000075640 00000 n 
+0000075784 00000 n 
+0000075932 00000 n 
+0000076080 00000 n 
+0000076228 00000 n 
+0000076376 00000 n 
+0000076524 00000 n 
+0000076672 00000 n 
+0000076821 00000 n 
+0000076970 00000 n 
+0000077119 00000 n 
+0000077268 00000 n 
+0000077417 00000 n 
+0000077566 00000 n 
+0000077715 00000 n 
+0000077938 00000 n 
+trailer
+<< /Size 33 /Root 32 0 R /Info 31 0 R >>
+startxref
+77989
+%%EOF
